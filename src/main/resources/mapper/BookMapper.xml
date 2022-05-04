@@ -13,6 +13,7 @@
         <result column="size" property="size" jdbcType="INTEGER" />
         <result column="type" property="type" jdbcType="VARCHAR" />
         <result column="publish_time" property="publishTime" jdbcType="TIMESTAMP" />
+        <result column="pic" property="pic" jdbcType="VARCHAR" />
     </resultMap>
 
     <!-- 模糊查询 倒序 -->
@@ -56,6 +57,9 @@
             </if>
             <if test="publishTime != null">
                 publish_time = #{publishTime},
+            </if>
+            <if test="pic != null">
+                `pic` = #{pic},
             </if>
         </set>
         where id = #{id}

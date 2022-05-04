@@ -10,7 +10,11 @@ spring:
     username: root
     password: 19981008
 
-# ---------------------------------------------  配置 JPA ------------------------------------------------------- #
+  servlet:
+    multipart:
+      max-file-size: 10MB
+
+  # ---------------------------------------------  配置 JPA ------------------------------------------------------- #
   jpa:
     hibernate:
 # ---------------------------------------------  更新策略 ------------------------------------------------------- #
@@ -22,6 +26,9 @@ spring:
 
   thymeleaf:
     cache: false
+  resources:
+    static-locations: classpath:/static/
+
 
   devtools:
     restart:
@@ -34,3 +41,9 @@ mybatis:
   mapper-locations: classpath:mapper/*.xml
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
+# ---------------------------------------------文件上传 --------------------------------------------------------- #
+file:
+  path: c://images/
+  relative: /images/**

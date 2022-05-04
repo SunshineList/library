@@ -66,6 +66,7 @@
 						<th>库存数量</th>
 						<th>翻译</th>
 						<th>分类</th>
+						<th>书籍图片</th>
 						<th>操作</th>
 					</tr>
 				</thead>
@@ -124,7 +125,7 @@
                    var num = pageSize * (currPage - 1) + index + 1;
                     text+= "<tr align='center'><td>"+num+"</td><td>"+value.name+"</td><td>"+value.author+"</td><td>"+value.isbn+"</td>" +
                         "<td>"+value.pages+"</td><td>"+value.price+"</td><td>"+value.publish+"</td><td>"+value.publishTime+"</td>" +
-                        "<td>"+value.size+"</td><td>"+value.translate+"</td><td>"+value.type+"</td><td>"+
+                        "<td>"+value.size+"</td><td>"+value.translate+"</td><td>"+value.type+"</td><td style='width: 15'><img style='width: 15%; height: auto' src="+value.pic+"></td><td>"+
                         "<button class='button blue empty' onclick='updateBook("+value.id+")'>编辑</button> &nbsp;<button class='button yellow empty' onclick='delBook("+value.id+")'>删除</button></td></tr>";
                 });
 

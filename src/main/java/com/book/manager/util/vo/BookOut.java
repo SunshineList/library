@@ -41,4 +41,8 @@ public class BookOut {
 
     @ApiModelProperty("出版时间")
     private String publishTime;
+
+    @ApiModelProperty("书籍图片")
+    private String pic;
+
 }

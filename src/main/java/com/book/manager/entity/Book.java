@@ -60,5 +60,8 @@ public class Book {
     @ApiModelProperty("出版时间")
     private Date publishTime;
 
+    @ApiModelProperty("书籍图片")
+    private String pic;
+
     // json字符串： {"isbn":"isbn","name":"name","author":"author","pages":"pages","translate":"translate","publish":"publish","price":"price","size":"size","type":"type","publishTime":"publishTime"}
 }
