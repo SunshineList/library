@@ -48,9 +48,9 @@ public class Borrow {
     private Integer ret;
 
     @ApiModelProperty("用户姓名")
-    private String userName;
+    private String username;
 
     @ApiModelProperty("图书名称")
-    private String bookName;
+    private String bookname;
     // json: {"userId":userId,"bookId":bookId,"createTime":createTime,"endTime":endTime,"updateTime":updateTime}
 }

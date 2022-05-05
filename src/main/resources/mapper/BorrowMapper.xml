@@ -47,10 +47,10 @@
         select * from borrow
         <where>
             <if test="_parameter != null and _parameter != ''">
-                and `user_id` like CONCAT('%',#{_parameter},'%') or `book_id` like CONCAT('%',#{_parameter},'%')
+                and `username` like CONCAT('%',#{_parameter},'%') or `bookname` like CONCAT('%',#{_parameter},'%')
             </if>
         </where>
-        order by create_time desc
+        order by create_time desc, ret desc
     </select>
 
 </mapper>

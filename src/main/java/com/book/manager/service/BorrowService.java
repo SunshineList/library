@@ -99,8 +99,8 @@ public class BorrowService {
 
         // 添加借阅信息, 借阅默认为未归还状态
         borrow.setRet(Constants.NO);
-        borrow.setUserName(users.getUsername());
-        borrow.setBookName(book.getName());
+        borrow.setUsername(users.getUsername());
+        borrow.setBookname(book.getName());
 //        borrow.setUserId(users.getId());
 //        borrow.setBookId(book.getId());
         borrowRepository.save(borrow);
@@ -222,6 +222,9 @@ public class BorrowService {
 
         PageHelper.startPage(pageIn.getCurrPage(),pageIn.getPageSize());
 
+//        System.out.println("********************************");
+//        System.out.println(pageIn.getKeyword());
+
         List<Borrow> list = borrowMapper.findLogList(pageIn.getKeyword());
 
         PageInfo<Borrow> pageInfo = new PageInfo<>(list);
@@ -230,8 +233,12 @@ public class BorrowService {
         for (Borrow borrow : pageInfo.getList()) {
             BorrowOut out = new BorrowOut();
             BeanUtil.copyProperties(borrow,out);
-//            out.setUserName(usersRepository.findUsersById(out.getUserId()).getUsername());
-//            out.setBookName(bookRepository.findBookById(out.getBookId()).getName());
+            if (out.getUsername() == null) {
+                out.setUsername(usersRepository.findUsersById(out.getUserId()).getUsername());
+            }
+            if (out.getBookname() == null) {
+                out.setBookname(bookRepository.findBookById(out.getBookId()).getName());
+            }
             out.setEndTime(DateUtil.format(borrow.getEndTime(), "yyyy-MM-dd"));
             out.setCreateTime(DateUtil.format(borrow.getCreateTime(),"yyyy-MM-dd"));
             out.setUpdateTime(DateUtil.format(borrow.getUpdateTime(), "yyyy-MM-dd"));

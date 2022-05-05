@@ -90,6 +90,24 @@
         rander(1, "", 10);
     });
 
+    var handleValue = (value) => {
+        for (let x in value) {
+            if (value[x] === null) { // 如果是null 把直接内容转为 ''
+                value[x] = '';
+            } else {
+                if (Array.isArray(value[x])) { // 是数组遍历数组 递归继续处理
+                    value[x] = value[x].map(z => {
+                        return handleValue(z);
+                    });
+                }
+                if(typeof(value[x]) === 'object'){ // 是json 递归继续处理
+                    value[x] = handleValue(value[x])
+                }
+            }
+        }
+        return value;
+    }
+
     // 渲染数据表格
     function rander(currPage, keyword, pageSize) {
         // 定义全局 分页属性
@@ -116,11 +134,11 @@
 
 
                 $.each(array, function (index, value) {
+                    value = handleValue(value);
                     var ret = value.ret === 1 ? "未归还" : "已归还"
-                    var updateTime = value.updateTime === null ? "" : value.updateTime
                     var num = pageSize * (currPage - 1) + index + 1;
-                    text += "<tr align='center'><td>" + num + "</td><td>" + value.userName + "</td><td>" + value.bookName + "</td><td>" + value.createTime + "</td>" +
-                        "<td>" + value.endTime + "</td><td>" + updateTime + "</td><td>" + ret + "</td></tr>";
+                    text += "<tr align='center'><td>" + num + "</td><td>" + value.username + "</td><td>" + value.bookname + "</td><td>" + value.createTime + "</td>" +
+                        "<td>" + value.endTime + "</td><td>" + value.updateTime + "</td><td>" + ret + "</td></tr>";
                 });
 
                 $("#tbody").html(text);
