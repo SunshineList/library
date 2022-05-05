@@ -1,16 +1,27 @@
 package com.book.manager.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
+import com.book.manager.dao.BookMapper;
+import com.book.manager.dao.BorrowMapper;
 import com.book.manager.entity.Borrow;
+import com.book.manager.repos.BookRepository;
+import com.book.manager.repos.UsersRepository;
 import com.book.manager.service.BookService;
 import com.book.manager.service.BorrowService;
 import com.book.manager.util.R;
 import com.book.manager.util.consts.Constants;
 import com.book.manager.util.http.CodeEnum;
+import com.book.manager.util.ro.PageIn;
 import com.book.manager.util.ro.RetBookIn;
 import com.book.manager.util.vo.BackOut;
 import com.book.manager.util.vo.BookOut;
+import com.book.manager.util.vo.BorrowOut;
+import com.book.manager.util.vo.PageOut;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +47,7 @@ public class BorrowController {
 
     @Autowired
     private BookService bookService;
+
 
     @ApiOperation("借阅列表")
     @GetMapping("/list")
@@ -116,6 +128,19 @@ public class BorrowController {
         // 归还图书
         borrowService.retBook(userId,bookId);
         return R.success(CodeEnum.SUCCESS);
+    }
+
+    @ApiOperation("借阅操作日志记录")
+    @PostMapping("/borrow_log")
+    public R borrowLog(@RequestBody PageIn pageIn){
+
+        System.out.println(pageIn);
+
+        if (pageIn == null) {
+            return R.fail(CodeEnum.PARAM_ERROR);
+        }
+
+        return R.success(CodeEnum.SUCCESS, borrowService.getLogList(pageIn));
     }
 
 }

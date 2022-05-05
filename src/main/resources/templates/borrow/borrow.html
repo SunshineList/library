@@ -239,7 +239,7 @@
 			console.log(userId);
             // 查找到用户, 进行借阅
             if (userId >0) {
-                var json = {"userId":userId,"bookId":bookId,"createTime":sTime,"endTime":eTime,"updateTime":eTime};
+                var json = {"userId":userId,"bookId":bookId,"createTime":sTime,"endTime":eTime,"updateTime":""};
                 // 借阅图书
                 $.ajax({
                     //请求方式

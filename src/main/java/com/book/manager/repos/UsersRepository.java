@@ -42,4 +42,12 @@ public interface UsersRepository extends JpaRepository<Users,Integer>{
      */
     Users findByUsername(@Param("username") String username);
 
+    /**
+     *
+     * 用户id查询
+     */
+
+
+    Users findUsersById(@Param("id") Integer id);
+
 }

@@ -35,4 +35,11 @@
         </set>
         where id = #{id}
     </update>
+
+    <select id="findLogList" resultMap="BaseResultMap">
+
+        select * from borrow order by create_time
+
+    </select>
+
 </mapper>

@@ -1,6 +1,7 @@
 package com.book.manager.service;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DateUtil;
 import com.book.manager.dao.BookMapper;
 import com.book.manager.dao.BorrowMapper;
 import com.book.manager.dao.UsersMapper;
@@ -9,13 +10,20 @@ import com.book.manager.entity.Borrow;
 import com.book.manager.entity.Users;
 import com.book.manager.repos.BookRepository;
 import com.book.manager.repos.BorrowRepository;
+import com.book.manager.repos.UsersRepository;
 import com.book.manager.util.consts.Constants;
+import com.book.manager.util.ro.PageIn;
 import com.book.manager.util.vo.BookOut;
+import com.book.manager.util.vo.BorrowOut;
+import com.book.manager.util.vo.PageOut;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +47,12 @@ public class BorrowService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UsersRepository usersRepository;
+
+    @Autowired
+    private BookRepository bookRepository;
 
     /**
      * 添加
@@ -84,7 +98,9 @@ public class BorrowService {
 
         // 添加借阅信息, 借阅默认为未归还状态
         borrow.setRet(Constants.NO);
-        borrowRepository.saveAndFlush(borrow);
+//        borrow.setUserId(users.getId());
+//        borrow.setBookId(book.getId());
+        borrowRepository.save(borrow);
 
         // 一切正常
         return Constants.OK;
@@ -123,6 +139,13 @@ public class BorrowService {
         return borrowMapper.updateBorrow(borrow)>0;
     }
 
+    /**
+     * 编辑
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateBorrowInfo(Borrow borrow){
+        return borrowMapper.updateBor(BeanUtil.beanToMap(borrow)) > 0;
+    }
 
     /**
      * 编辑
@@ -148,6 +171,15 @@ public class BorrowService {
     }
 
     /**
+     * 编辑用户
+     * @param book 图书对象
+     * @return true or false
+     */
+    public boolean updateBook(Book book) {
+        return borrowMapper.updateBor(BeanUtil.beanToMap(book))>0;
+    }
+
+    /**
      * 归还书籍, 使用事务保证 ACID
      * @param userId 用户Id
      * @param bookId 书籍id
@@ -170,9 +202,44 @@ public class BorrowService {
         bookService.updateBook(book);
         // 借阅记录改为已归还,删除记录
         Borrow borrow = this.findBorrowByUserIdAndBookId(userId, bookId);
-//        borrow.setRet(Constants.YES);
-//        borrow.setUpdateTime(new Date());
-//        borrowMapper.updateBor(BeanUtil.beanToMap(borrow))>0;
-        this.deleteBorrow(borrow.getId());
+        borrow.setRet(Constants.YES);
+        borrow.setUpdateTime(new Date());
+        this.updateBorrowInfo(borrow);
+//        this.deleteBorrow(borrow.getId());
     }
+
+
+    /**
+     * 操作日志记录
+     * @param pageIn
+     * @return
+     */
+
+    public PageOut getLogList(PageIn pageIn) {
+
+        PageHelper.startPage(pageIn.getCurrPage(),pageIn.getPageSize());
+        List<Borrow> list = borrowMapper.findLogList();
+        PageInfo<Borrow> pageInfo = new PageInfo<>(list);
+
+        List<BorrowOut> borrowOuts = new ArrayList<>();
+        for (Borrow borrow : pageInfo.getList()) {
+            BorrowOut out = new BorrowOut();
+            BeanUtil.copyProperties(borrow,out);
+            out.setUserName(usersRepository.findUsersById(out.getUserId()).getUsername());
+            out.setBookName(bookRepository.findBookById(out.getBookId()).getName());
+            out.setEndTime(DateUtil.format(borrow.getEndTime(), "yyyy-MM-dd"));
+            out.setCreateTime(DateUtil.format(borrow.getCreateTime(),"yyyy-MM-dd"));
+            out.setUpdateTime(DateUtil.format(borrow.getUpdateTime(), "yyyy-MM-dd"));
+            borrowOuts.add(out);
+        }
+
+        // 自定义分页返回对象
+        PageOut pageOut = new PageOut();
+        pageOut.setList(borrowOuts);
+        pageOut.setTotal((int)pageInfo.getTotal());
+        pageOut.setCurrPage(pageInfo.getPageNum());
+        pageOut.setPageSize(pageInfo.getPageSize());
+        return pageOut;
+    }
+
 }

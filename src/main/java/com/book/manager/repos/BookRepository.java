@@ -18,4 +18,10 @@ public interface BookRepository extends JpaRepository<Book,Integer> {
      * @return
      */
     Book findByIsbn(String isbn);
+
+    /**
+     * 根据id查询图书信息
+     */
+
+    Book findBookById(Integer id);
 }
