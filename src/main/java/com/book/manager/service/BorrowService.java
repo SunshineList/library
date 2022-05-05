@@ -18,6 +18,7 @@ import com.book.manager.util.vo.BorrowOut;
 import com.book.manager.util.vo.PageOut;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -98,6 +99,8 @@ public class BorrowService {
 
         // 添加借阅信息, 借阅默认为未归还状态
         borrow.setRet(Constants.NO);
+        borrow.setUserName(users.getUsername());
+        borrow.setBookName(book.getName());
 //        borrow.setUserId(users.getId());
 //        borrow.setBookId(book.getId());
         borrowRepository.save(borrow);
@@ -218,15 +221,17 @@ public class BorrowService {
     public PageOut getLogList(PageIn pageIn) {
 
         PageHelper.startPage(pageIn.getCurrPage(),pageIn.getPageSize());
-        List<Borrow> list = borrowMapper.findLogList();
+
+        List<Borrow> list = borrowMapper.findLogList(pageIn.getKeyword());
+
         PageInfo<Borrow> pageInfo = new PageInfo<>(list);
 
         List<BorrowOut> borrowOuts = new ArrayList<>();
         for (Borrow borrow : pageInfo.getList()) {
             BorrowOut out = new BorrowOut();
             BeanUtil.copyProperties(borrow,out);
-            out.setUserName(usersRepository.findUsersById(out.getUserId()).getUsername());
-            out.setBookName(bookRepository.findBookById(out.getBookId()).getName());
+//            out.setUserName(usersRepository.findUsersById(out.getUserId()).getUsername());
+//            out.setBookName(bookRepository.findBookById(out.getBookId()).getName());
             out.setEndTime(DateUtil.format(borrow.getEndTime(), "yyyy-MM-dd"));
             out.setCreateTime(DateUtil.format(borrow.getCreateTime(),"yyyy-MM-dd"));
             out.setUpdateTime(DateUtil.format(borrow.getUpdateTime(), "yyyy-MM-dd"));

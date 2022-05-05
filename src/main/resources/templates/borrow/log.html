@@ -36,50 +36,50 @@
         </a>
 
         <!--正文内容-->
-        <!--        <div class="main">-->
-        <!--            &lt;!&ndash;表格上方的搜索操作&ndash;&gt;-->
-        <!--            <div class="admin-search">-->
-        <!--                <div class="input-group">-->
-        <!--                    <input id="keyword" type="text" class="text" placeholder="搜索用户名或者昵称" />-->
-        <!--                    <button id="searchBtn" class="button blue" onclick="search();">搜索</button>-->
-        <!--                </div>-->
-        <!--            </div>-->
+        <div class="main">
+            <!--表格上方的搜索操作-->
+            <div class="admin-search">
+                <div class="input-group">
+                    <input id="keyword" type="text" class="text" placeholder="搜索用户名或者书名搜索"/>
+                    <button id="searchBtn" class="button blue" onclick="search();">搜索</button>
+                </div>
+            </div>
 
-        <!--表格上方的操作元素，添加、删除等-->
-        <!--
-        <div class="operation-wrap">
-            <div class="buttons-wrap">
-                <button class="button blue radius-3"><span class="icon-plus"></span> 添加</button>
-                <button class="button red radius-3"><span class="icon-close2"></span> 删除</button>
+            <!--表格上方的操作元素，添加、删除等-->
+            <!--
+            <div class="operation-wrap">
+                <div class="buttons-wrap">
+                    <button class="button blue radius-3"><span class="icon-plus"></span> 添加</button>
+                    <button class="button red radius-3"><span class="icon-close2"></span> 删除</button>
+                </div>
+            </div>
+            -->
+            <table class="table color2" id="table">
+                <thead>
+                <tr align="center">
+                    <th>序号</th>
+                    <th>借阅用户姓名</th>
+                    <th>借阅图书名称</th>
+                    <th>借阅时间</th>
+                    <th>归还时间</th>
+                    <th>实际归还时间</th>
+                    <th>是否归还</th>
+                </tr>
+                </thead>
+                <tbody id="tbody">
+                <!--<tr>-->
+                <!--<td class="checkbox"><input type="checkbox" class="fill listen-1-2" /> </td>-->
+                <!--<td>1</td>-->
+                <!--<td><button class="button blue">编辑</button><button class="button red">删除</button></td>-->
+                <!--</tr>-->
+                </tbody>
+            </table>
+
+            <div class="page">
+                <ul class="pagination" id="page"></ul>
             </div>
         </div>
-        -->
-        <table class="table color2" id="table">
-            <thead>
-            <tr align="center">
-                <th>序号</th>
-                <th>借阅用户姓名</th>
-                <th>借阅图书名称</th>
-                <th>借阅时间</th>
-                <th>归还时间</th>
-                <th>实际归还时间</th>
-                <th>是否归还</th>
-            </tr>
-            </thead>
-            <tbody id="tbody">
-            <!--<tr>-->
-            <!--<td class="checkbox"><input type="checkbox" class="fill listen-1-2" /> </td>-->
-            <!--<td>1</td>-->
-            <!--<td><button class="button blue">编辑</button><button class="button red">删除</button></td>-->
-            <!--</tr>-->
-            </tbody>
-        </table>
-
-        <div class="page">
-            <ul class="pagination" id="page"></ul>
-        </div>
     </div>
-</div>
 </div>
 
 

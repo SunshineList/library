@@ -36,10 +36,21 @@
         where id = #{id}
     </update>
 
-    <select id="findLogList" resultMap="BaseResultMap">
+<!--    <select id="findLogList" resultMap="BaseResultMap">-->
 
-        select * from borrow order by createTime
+<!--        select * from borrow order by create_time-->
 
+<!--    </select>-->
+
+    <!-- 模糊查询 倒序 -->
+    <select id="findLogList" resultMap="BaseResultMap" >
+        select * from borrow
+        <where>
+            <if test="_parameter != null and _parameter != ''">
+                and `user_id` like CONCAT('%',#{_parameter},'%') or `book_id` like CONCAT('%',#{_parameter},'%')
+            </if>
+        </where>
+        order by create_time desc
     </select>
 
 </mapper>
