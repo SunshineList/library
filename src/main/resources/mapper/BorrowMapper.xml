@@ -38,7 +38,7 @@
 
     <select id="findLogList" resultMap="BaseResultMap">
 
-        select * from borrow order by create_time
+        select * from borrow order by createTime
 
     </select>
 
