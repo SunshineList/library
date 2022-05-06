@@ -44,7 +44,7 @@ public class Users {
     @ApiModelProperty("生日")
     private Date birthday;
 
-    @ApiModelProperty("是否为管理员")
+    @ApiModelProperty("是否为超级管理员")
     private Integer isAdmin;
 
     @ApiModelProperty("电话")
@@ -59,7 +59,7 @@ public class Users {
     @ApiModelProperty("可借数量")
     private Integer size;
 
-    @ApiModelProperty("身份：0 学生,1 教师,2 校外人士,3 管理员")
+    @ApiModelProperty("身份：0 普通读者,1 vip读者,2 图书超级管理员,3 超级管理员,4 采购员")
     private Integer identity;
 
     // json： {"id":id,"avatar":avatar,"nickname":nickname,"username":username,"password":password,"birthday":birthday,"isAdmin":isAdmin,"tel":tel

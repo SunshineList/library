@@ -34,7 +34,7 @@
 			<!--右侧-->
 			<ul class="admin-navbar-nav fr">
 				<li>
-					<a href="javascript:;">欢迎您，<span id="nickname">管理员</span></a>
+					<a href="javascript:;">欢迎您，<span id="nickname">超级管理员</span></a>
 					<ul class="dropdown-menu" style="right: 10px;">
 						<li><a href="/logout">退出当前账号</a></li>
 					</ul>
@@ -80,15 +80,24 @@
                                     <li><a id="reader-add" href="javascript:page('reader/reader-add');">读者添加</a></li>
 								</ul>
                             </li>
+
+							<li class="menu-item">
+								<a href="javascript:;">采购员管理<i class="icon-keyboard_arrow_left"></i></a>
+								<ul>
+									<li><a id="purchase-list" href="javascript:page('purchase/purchase-list');">采购员列表</a></li>
+									<li><a id="purchase-add" href="javascript:page('purchase/purchase-add');">采购员添加</a></li>
+								</ul>
+							</li>
                             
                             <li class="menu-item">
 								<a href="javascript:;">用户中心<i class="icon-keyboard_arrow_left"></i></a>
 								<ul>
 									<li><a id="user-info" href="javascript:page('user/user-info');">个人信息</a></li>
                                     <li><a id="user-manage" href="javascript:page('user/user-list');">用户管理</a></li>
-                                    <li><a id="admin-add" href="javascript:page('user/user-add');">添加管理员</a></li>
+                                    <li><a id="admin-add" href="javascript:page('user/user-add');">添加超级管理员</a></li>
 								</ul>
 							</li>
+
 
 							<li class="menu-item">
 								<a href="javascript:;">日志管理<i class="icon-keyboard_arrow_left"></i></a>
@@ -149,12 +158,14 @@
                 var auth = user.isAdmin;
                 if (auth != 0) {
                     console.log(auth);
-                    // 若为普通用户权限, 则无法访问修改类菜单 无法添加图书,添加读者,管理用户以及添加管理员
+                    // 若为普通用户权限, 则无法访问修改类菜单 无法添加图书,添加读者,管理用户以及添加超级管理员
 					$("#add-book").hide();
 					$("#reader-add").hide();
 					$("#user-manage").hide();
 					$("#admin-add").hide();
 					$("#log").hide();
+					$("#purchase-add").hide();
+					$("#purchase-list").hide();
 				}
 			}
 

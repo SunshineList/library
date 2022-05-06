@@ -40,6 +40,7 @@ public class UsersController {
     @ApiOperation("用户列表")
     @PostMapping("/list")
     public R getUsers(@RequestBody PageIn pageIn) {
+
         if (pageIn == null) {
             return R.fail(CodeEnum.PARAM_ERROR);
         }
@@ -51,22 +52,41 @@ public class UsersController {
         pageOut.setTotal((int) userList.getTotal());
         List<UserOut> outs = new ArrayList<>();
         for (Users users : userList.getList()) {
-            UserOut out = new UserOut();
-            BeanUtils.copyProperties(users,out);
-            out.setIdent(ConvertUtil.identStr(users.getIdentity()));
-            out.setBirth(DateUtil.format(users.getBirthday(),Constants.DATE_FORMAT));
-            outs.add(out);
+            if (pageIn.getIdent() != null && pageIn.getIdent().equals("1")) {  // 当ident为1时过滤读者信息
+                if (users.getIdentity() == 0 || users.getIdentity() == 1) {
+                    UserOut out = new UserOut();
+                    BeanUtils.copyProperties(users, out);
+                    out.setIdent(ConvertUtil.identStr(users.getIdentity()));
+                    out.setBirth(DateUtil.format(users.getBirthday(), Constants.DATE_FORMAT));
+                    outs.add(out);
+                }
+            } else if (pageIn.getIdent() != null && pageIn.getIdent().equals("2")) { // 当ident为2的时候过滤采购员
+                if (users.getIdentity() == 4) {
+                    UserOut out = new UserOut();
+                    BeanUtils.copyProperties(users, out);
+                    out.setIdent(ConvertUtil.identStr(users.getIdentity()));
+                    out.setBirth(DateUtil.format(users.getBirthday(), Constants.DATE_FORMAT));
+                    outs.add(out);
+                }
+            } else {
+                UserOut out = new UserOut();
+                BeanUtils.copyProperties(users, out);
+                out.setIdent(ConvertUtil.identStr(users.getIdentity()));
+                out.setBirth(DateUtil.format(users.getBirthday(), Constants.DATE_FORMAT));
+                outs.add(out);
+            }
+
         }
 
         pageOut.setList(outs);
 
-        return R.success(CodeEnum.SUCCESS,pageOut);
+        return R.success(CodeEnum.SUCCESS, pageOut);
     }
 
     @ApiOperation("添加用户")
     @PostMapping("/add")
     public R addUsers(@RequestBody Users users) {
-        return R.success(CodeEnum.SUCCESS,userService.addUser(users));
+        return R.success(CodeEnum.SUCCESS, userService.addUser(users));
     }
 
 
@@ -78,25 +98,37 @@ public class UsersController {
         }
         // 读者默认是普通用户
         users.setIsAdmin(1);
-        return R.success(CodeEnum.SUCCESS,userService.addUser(users));
+        return R.success(CodeEnum.SUCCESS, userService.addUser(users));
     }
 
-    @ApiOperation("添加管理员")
+    @ApiOperation("添加超级管理员")
     @PostMapping("/addAdmin")
     public R addAdmin(@RequestBody Users users) {
         if (users == null) {
             return R.fail(CodeEnum.PARAM_ERROR);
         }
-        // 设置管理员权限
+        // 设置超级管理员权限
         users.setIsAdmin(0);
-        return R.success(CodeEnum.SUCCESS,userService.addUser(users));
+        return R.success(CodeEnum.SUCCESS, userService.addUser(users));
+    }
+
+    @ApiOperation("添加采购员")
+    @PostMapping("/addPurchase")
+    public R addPurchase(@RequestBody Users users) {
+        if (users == null) {
+            return R.fail(CodeEnum.PARAM_ERROR);
+        }
+
+        // 设置采购员
+        users.setIsAdmin(4);
+        return R.success(CodeEnum.SUCCESS, userService.addUser(users));
     }
 
 
     @ApiOperation("编辑用户")
     @PostMapping("/update")
     public R modifyUsers(@RequestBody Users users) {
-        return R.success(CodeEnum.SUCCESS,userService.updateUser(users));
+        return R.success(CodeEnum.SUCCESS, userService.updateUser(users));
     }
 
 
@@ -104,12 +136,12 @@ public class UsersController {
     @GetMapping("/detail")
     public R userDetail(Integer id) {
         Users user = userService.findUserById(id);
-        if (user!=null) {
+        if (user != null) {
             UserOut out = new UserOut();
-            BeanUtils.copyProperties(user,out);
-            out.setBirth(DateUtil.format(user.getBirthday(),Constants.DATE_FORMAT));
+            BeanUtils.copyProperties(user, out);
+            out.setBirth(DateUtil.format(user.getBirthday(), Constants.DATE_FORMAT));
             out.setIdent(ConvertUtil.identStr(user.getIdentity()));
-            return R.success(CodeEnum.SUCCESS,out);
+            return R.success(CodeEnum.SUCCESS, out);
         }
 
         return R.fail(CodeEnum.NOT_FOUND);
@@ -127,27 +159,29 @@ public class UsersController {
     public R getCurrUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         System.out.println(principal);
-        if (principal!=null) {
-            Map<String,Object> map = BeanUtil.beanToMap(principal);
+        if (principal != null) {
+            Map<String, Object> map = BeanUtil.beanToMap(principal);
             String username = (String) map.get("username");
             if (StrUtil.isNotBlank(username)) {
                 Users users = userService.findByUsername(username);
                 UserOut out = new UserOut();
-                BeanUtils.copyProperties(users,out);
-                out.setBirth(DateUtil.format(users.getBirthday(),Constants.DATE_FORMAT));
+                BeanUtils.copyProperties(users, out);
+                out.setBirth(DateUtil.format(users.getBirthday(), Constants.DATE_FORMAT));
                 Integer identity = users.getIdentity();
                 String ident = "";
                 if (identity == Constants.STUDENT) {
                     ident = Constants.STU_STR;
-                }else if (identity == Constants.TEACHER) {
+                } else if (identity == Constants.TEACHER) {
                     ident = Constants.TEA_STR;
-                }else if (identity == Constants.OTHER) {
+                } else if (identity == Constants.OTHER) {
                     ident = Constants.OTHER_STR;
-                }else if (identity == Constants.ADMIN) {
+                } else if (identity == Constants.ADMIN) {
                     ident = Constants.ADMIN_STR;
+                } else if (identity == Constants.PURCHASE) {
+                    ident = Constants.PURCHASE_STR;
                 }
                 out.setIdent(ident);
-                return R.success(CodeEnum.SUCCESS,out);
+                return R.success(CodeEnum.SUCCESS, out);
             }
         }
         return R.fail(CodeEnum.USER_NOT_FOUND);

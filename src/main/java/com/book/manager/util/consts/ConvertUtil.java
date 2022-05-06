@@ -22,6 +22,8 @@ public class ConvertUtil {
             result = Constants.ADMIN_STR;
         }else if (type == Constants.OTHER) {
             result = Constants.OTHER_STR;
+        }else if (type == Constants.PURCHASE){
+            result = Constants.PURCHASE_STR;
         }
 
         return result;

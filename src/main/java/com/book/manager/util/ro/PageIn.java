@@ -22,4 +22,8 @@ public class PageIn {
     /** 当前页条数 */
     @ApiModelProperty("每页数量")
     private Integer pageSize;
+
+    /** 身份过滤  */
+    @ApiModelProperty("身份过滤")
+    private String ident;
 }

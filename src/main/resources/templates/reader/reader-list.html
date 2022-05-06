@@ -91,6 +91,24 @@
         rander(1,"",10);
     });
 
+	var handleValue = (value) => {
+		for (let x in value) {
+			if (value[x] === null) { // 如果是null 把直接内容转为 ''
+				value[x] = '';
+			} else {
+				if (Array.isArray(value[x])) { // 是数组遍历数组 递归继续处理
+					value[x] = value[x].map(z => {
+						return handleValue(z);
+					});
+				}
+				if(typeof(value[x]) === 'object'){ // 是json 递归继续处理
+					value[x] = handleValue(value[x])
+				}
+			}
+		}
+		return value;
+	}
+
     // 渲染数据表格
     function rander(currPage,keyword,pageSize) {
         // 定义全局 分页属性
@@ -102,7 +120,7 @@
             //请求地址
             url : "/user/list",
             //数据，json字符串
-            data : JSON.stringify({"currPage":currPage,"keyword": keyword,"pageSize": pageSize}),
+            data : JSON.stringify({"currPage":currPage,"keyword": keyword,"pageSize": pageSize, "ident": "1"}),
             //请求成功
             success : function(result) {
                 console.log(result);
@@ -117,7 +135,7 @@
                 var array = r.list;
                 var text = "";
                 $.each(array,function(index,value){
-                    console.log(value);
+                	value = handleValue(value)
                     var num = pageSize * (currPage - 1) + index + 1;
                     text+= "<tr align='center'><td>"+num+"</td><td>"+value.nickname+"</td><td>"+value.username+"</td><td>"+value.birth+"</td>" +
                         "<td>"+value.tel+"</td><td>"+value.email+"</td><td>"+value.address+"</td><td>"+value.size+"</td>" +

@@ -24,17 +24,20 @@ public final class Constants {
     public static final String NO_STR = "否";
     /** 日期格式 */
     public static final String DATE_FORMAT = "yyyy-MM-dd";
-    /** 学生 */
+    /** 普通读者 */
     public static final int STUDENT = 0;
-    /** 教师 */
+    /** vip读者 */
     public static final int TEACHER = 1;
     /** 其他 */
     public static final int OTHER = 2;
-    /** 管理员 */
+    /** 超级管理员 */
     public static final int ADMIN = 3;
+    /** 采购员 */
+    public static final int PURCHASE = 4;
     /** 身份 */
-    public static final String STU_STR = "学生";
-    public static final String TEA_STR = "教师";
-    public static final String OTHER_STR = "社会人士";
-    public static final String ADMIN_STR = "管理员";
+    public static final String STU_STR = "普通读者";
+    public static final String TEA_STR = "vip读者";
+    public static final String OTHER_STR = "图书管理员";
+    public static final String ADMIN_STR = "超级管理员";
+    public static final String PURCHASE_STR = "采购员";
 }
