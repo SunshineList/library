@@ -3,6 +3,8 @@ package com.book.manager.util.vo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * 采购记录
  */
@@ -30,8 +32,10 @@ public class PurchaseOut {
     @ApiModelProperty("采购理由")
     private String reason;
 
-    @ApiModelProperty("状态  0 审核通过 1审核不通过")
+    @ApiModelProperty("状态  0 审核通过 1审核不通过 2待审核")
     private String status;
 
+    @ApiModelProperty("创建时间")
+    private String createTime;
 
 }

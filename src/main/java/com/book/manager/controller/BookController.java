@@ -30,7 +30,6 @@ public class BookController {
         if (pageIn == null) {
             return R.fail(CodeEnum.PARAM_ERROR);
         }
-
         return R.success(CodeEnum.SUCCESS,bookService.getBookList(pageIn));
     }
 

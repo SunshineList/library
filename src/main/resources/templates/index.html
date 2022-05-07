@@ -64,7 +64,7 @@
 								</ul>
                             </li>
                             
-							<li class="menu-item">
+							<li class="menu-item" id="borrow">
 								<a href="javascript:;">借阅管理<i class="icon-keyboard_arrow_left"></i></a>
 								<ul>
 									<li><a id="book-search" href="javascript:page('borrow/book-search');">搜索图书</a></li>
@@ -73,7 +73,7 @@
 								</ul>
                             </li>
 
-                            <li class="menu-item">
+                            <li class="menu-item" id="reader">
 								<a href="javascript:;">读者管理<i class="icon-keyboard_arrow_left"></i></a>
 								<ul>
 									<li><a id="reader-list" href="javascript:page('reader/reader-list');">读者列表</a></li>
@@ -81,15 +81,15 @@
 								</ul>
                             </li>
 
-							<li class="menu-item">
-								<a href="javascript:;">采购员管理<i class="icon-keyboard_arrow_left"></i></a>
+							<li class="menu-item" id="purchase">
+								<a href="javascript:;">采购管理<i class="icon-keyboard_arrow_left"></i></a>
 								<ul>
-									<li><a id="purchase-list" href="javascript:page('purchase/purchase-list');">采购员列表</a></li>
-									<li><a id="purchase-add" href="javascript:page('purchase/purchase-add');">采购员添加</a></li>
+									<li><a id="purchase-list" href="javascript:page('purchase/purchase-list');">采购记录列表</a></li>
+									<li><a id="purchase-add" href="javascript:page('purchase/purchase-add');">采购</a></li>
 								</ul>
 							</li>
                             
-                            <li class="menu-item">
+                            <li class="menu-item" id="user">
 								<a href="javascript:;">用户中心<i class="icon-keyboard_arrow_left"></i></a>
 								<ul>
 									<li><a id="user-info" href="javascript:page('user/user-info');">个人信息</a></li>
@@ -99,7 +99,7 @@
 							</li>
 
 
-							<li class="menu-item">
+							<li class="menu-item" id="log_m">
 								<a href="javascript:;">日志管理<i class="icon-keyboard_arrow_left"></i></a>
 								<ul>
 									<li><a id="log" href="javascript:page('borrow/log');">借阅日志</a></li>
@@ -155,17 +155,39 @@
                 // 设置用户昵称
                 $("#nickname").text(user.nickname);
 				// 根据用户权限, 控制用户可见菜单
-                var auth = user.isAdmin;
-                if (auth != 0) {
-                    console.log(auth);
-                    // 若为普通用户权限, 则无法访问修改类菜单 无法添加图书,添加读者,管理用户以及添加超级管理员
-					$("#add-book").hide();
-					$("#reader-add").hide();
-					$("#user-manage").hide();
-					$("#admin-add").hide();
-					$("#log").hide();
+                var auth = user.identity;
+                if (auth === 3){   // 管理员
 					$("#purchase-add").hide();
-					$("#purchase-list").hide();
+				}
+
+            	if (auth === 1){ // 普通读者
+
+				}
+
+            	if (auth === 2){ // vip读者
+
+				}
+
+            	if (auth === 3){  // 图书管理员
+
+				}
+                // if (auth !== 0) {
+                //     console.log(auth);
+                //     // 若为普通用户权限, 则无法访问修改类菜单 无法添加图书,添加读者,管理用户以及添加超级管理员
+				// 	$("#add-book").hide();
+				// 	$("#reader-add").hide();
+				// 	$("#user-manage").hide();
+				// 	$("#admin-add").hide();
+				// 	$("#log").hide();
+				// 	$("#purchase-add").hide();
+				// 	$("#purchase-list").hide();
+				// }
+                if (auth === 4){
+                	$("#add-book").hide();
+					$("#reader").hide();
+					$("#user").hide();
+					$("#borrow").hide();
+					$("#log_m").hide();
 				}
 			}
 

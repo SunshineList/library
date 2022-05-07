@@ -27,7 +27,7 @@
     <!--块元素-->
     <div class="block">
         <!--页面有多个表格时，可以用于标识表格-->
-        <h2>采购员列表</h2>
+        <h2>采购记录列表</h2>
         <!--右上角的返回按钮-->
         <a href="javascript:history.back();">
             <button class="button indigo radius-3" style="position: absolute;right: 20px;top: 16px;"><span
@@ -40,40 +40,27 @@
             <!--表格上方的搜索操作-->
             <div class="admin-search">
                 <div class="input-group">
-                    <input id="keyword" type="text" class="text" placeholder="搜索用户名或者昵称"/>
+                    <input id="keyword" type="text" class="text" placeholder="搜索书名或者ibsn编码"/>
                     <button id="searchBtn" class="button blue" onclick="search();">搜索</button>
                 </div>
             </div>
 
-            <!--表格上方的操作元素，添加、删除等-->
-            <!--
-            <div class="operation-wrap">
-                <div class="buttons-wrap">
-                    <button class="button blue radius-3"><span class="icon-plus"></span> 添加</button>
-                    <button class="button red radius-3"><span class="icon-close2"></span> 删除</button>
-                </div>
-            </div>
-            -->
             <table id="table" class="table color2">
                 <thead>
                 <tr align="center">
                     <th>序号</th>
-                    <th>昵称</th>
-                    <th>用户名</th>
-                    <th>生日</th>
-                    <th>电话</th>
-                    <th>邮箱</th>
-                    <th>地址</th>
-                    <th>身份</th>
+                    <th>书籍名称</th>
+                    <th>数量</th>
+                    <th>价格</th>
+                    <th>isbn编码</th>
+                    <th>图书分类</th>
+                    <th>采购理由</th>
+                    <th>状态</th>
+                    <th>申请时间</th>
                     <th>操作</th>
                 </tr>
                 </thead>
                 <tbody id="tbody">
-                <!--<tr>-->
-                <!--<td class="checkbox"><input type="checkbox" class="fill listen-1-2" /> </td>-->
-                <!--<td>1</td>-->
-                <!--<td><button class="button blue">编辑</button><button class="button red">删除</button></td>-->
-                <!--</tr>-->
                 </tbody>
             </table>
 
@@ -86,8 +73,18 @@
 
 
 <script>
+    var auth = 0;
     // 页面一加载, 展示数据列表, 每页10条
     $(document).ready(function () {
+        // 页面一加载, 读取登录用户信息, 进行权限限制
+        $.get("/user/currUser", function (data) {
+            var code = data.code;
+            var user = data.data;
+            if (code === 200) {
+                auth = user.identity;
+            }
+        })
+
         // 默认查询所有
         rander(1, "", 10);
     });
@@ -102,7 +99,7 @@
                         return handleValue(z);
                     });
                 }
-                if(typeof(value[x]) === 'object'){ // 是json 递归继续处理
+                if (typeof (value[x]) === 'object') { // 是json 递归继续处理
                     value[x] = handleValue(value[x])
                 }
             }
@@ -119,7 +116,7 @@
             //请求的媒体类型
             contentType: "application/json;charset=UTF-8",
             //请求地址
-            url: "/user/list",
+            url: "/purchase/list",
             //数据，json字符串
             data: JSON.stringify({"currPage": currPage, "keyword": keyword, "pageSize": pageSize, "ident": "2"}),
             //请求成功
@@ -138,10 +135,32 @@
                 $.each(array, function (index, value) {
                     value = handleValue(value)
                     var num = pageSize * (currPage - 1) + index + 1;
-                    text += "<tr align='center'><td>" + num + "</td><td>" + value.nickname + "</td><td>" + value.username + "</td><td>" + value.birth + "</td>" +
-                        "<td>" + value.tel + "</td><td>" + value.email + "</td><td>" + value.address + "</td>" +
-                        "<td>" + value.ident + "</td><td>" +
-                        "<button class='button blue empty' onclick='updateBook(" + value.id + ")'>编辑</button> &nbsp;<button class='button yellow empty' onclick='delBook(" + value.id + ")'>删除</button></td></tr>";
+                    if (auth === 4 && value.status === "审核不通过") {
+                        text += "<tr align='center'><td>" + num + "</td><td>" + value.bookname + "</td><td>" + value.num + "</td><td>" + value.price + "</td>" +
+                            "<td>" + value.isbn + "</td><td>" + value.bookType + "</td><td>" + value.reason + "</td><td>" + value.status + "</td><td>" + value.createTime + "</td><td>" +
+                            "<button class='button blue empty' onclick='updateBook(" + value.id + ")'>编辑</button> &nbsp;<button class='button yellow empty' onclick='delPurchase(" + value.id + ")'>删除</button>" +
+                            "</td></tr>";
+                    } else if (auth === 3 && value.status === "待审核") {
+                        text += "<tr align='center'><td>" + num + "</td><td>" + value.bookname + "</td><td>" + value.num + "</td><td>" + value.price + "</td>" +
+                            "<td>" + value.isbn + "</td><td>" + value.bookType + "</td><td>" + value.reason + "</td><td>" + value.status + "</td><td>" + value.createTime + "</td><td>" +
+                            "<button class='button green empty' onclick='checkPassPurchase(" + value.id + ")'>审核通过</button> &nbsp;<button class='button yellow empty' onclick='checkNoPassPurchase(" + value.id + ")'>审核不通过</button>" + "</td></tr>";
+                    } else if (auth === 4 && value.status === "审核通过") {
+                        text += "<tr align='center'><td>" + num + "</td><td>" + value.bookname + "</td><td>" + value.num + "</td><td>" + value.price + "</td>" +
+                            "<td>" + value.isbn + "</td><td>" + value.bookType + "</td><td>" + value.reason + "</td><td>" + value.status + "</td><td>" + value.createTime + "</td><td>" +
+                            "<button class='button yellow empty' onclick='delPurchase(" + value.id + ")'>删除</button>" + "</td></tr>";
+                    } else {
+                        text += "<tr align='center'>" +
+                            "<td>" + num + "</td><td>" +
+                            value.bookname + "</td><td>" +
+                            value.num + "</td><td>" +
+                            value.price + "</td><td>" +
+                            value.isbn + "</td><td>" +
+                            value.bookType + "</td><td>" +
+                            value.reason + "</td><td>" +
+                            value.status + "</td><td>" +
+                            value.createTime + "</td><td>" +
+                            "</td></tr>";
+                    }
                 });
 
                 $("#tbody").html(text);
@@ -189,7 +208,7 @@
     }
 
     // 删除
-    function delBook(id) {
+    function delPurchase(id) {
         console.log("delete reader" + id);
         javaex.confirm({
             content: "确定要删除么",
@@ -197,9 +216,44 @@
         });
     }
 
+    //审核通过
+    function checkPassPurchase(id) {
+        var status = "0";
+        javaex.confirm({
+            content: "确定审核通过吗?",
+            callback: "check(" + id + ", " + status + ")"
+        });
+    }
+
+    //审核不通过
+    function checkNoPassPurchase(id) {
+        var status = "1";
+        javaex.confirm({
+            content: "确定要审核不通过吗?",
+            callback: "check(" + id + ", " + status + ")"
+        });
+    }
+
+    function check(id, status) {
+        $.get("/purchase/check", {"id": id, "status": status},
+            function (data) {
+                var code = data.code;
+                if (code === 200) {
+                    javaex.message({
+                        content: "操作成功",
+                        type: "success"
+                    });
+
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1500)
+                }
+            });
+    }
+
     function delCallback(id) {
         // ajax
-        $.get("/user/delete", {"id": id},
+        $.get("/purchase/delete", {"id": id},
             function (data) {
                 var code = data.code;
                 if (code == 200) {
@@ -215,8 +269,6 @@
 
                 }
             });
-        // 如果你想阻止弹出层关闭，直接 return false; 即可
-        //return false;
     }
 </script>
 </body>

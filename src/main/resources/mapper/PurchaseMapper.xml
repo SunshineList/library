@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.book.manager.dao.PurchaseMapper">
+    <resultMap id="BaseResultMap" type="com.book.manager.entity.Purchase" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="bookname" property="bookname" jdbcType="VARCHAR" />
+        <result column="book_type" property="bookType" jdbcType="VARCHAR" />
+        <result column="isbn" property="isbn" jdbcType="VARCHAR" />
+        <result column="num" property="num" jdbcType="INTEGER" />
+        <result column="price" property="price" jdbcType="DOUBLE" />
+        <result column="reason" property="reason" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="VARCHAR"></result>
+    </resultMap>
+
+    <update id="checkPurchase" parameterType="map">
+        update purchase
+        <set>
+            `status` = #{status}
+        </set>
+        where id = #{id}
+    </update>
+
+<!--    <update id="updateBor" parameterType="map">-->
+<!--        update borrow-->
+<!--        <set>-->
+<!--            <if test="userId != null">-->
+<!--                user_id = #{userId},-->
+<!--            </if>-->
+<!--            <if test="bookId != null">-->
+<!--                book_id = #{bookId},-->
+<!--            </if>-->
+<!--            <if test="createTime != null">-->
+<!--                create_time = #{createTime},-->
+<!--            </if>-->
+<!--            <if test="endTime != null">-->
+<!--                end_time = #{endTime},-->
+<!--            </if>-->
+<!--            <if test="updateTime != null">-->
+<!--                update_time = #{updateTime},-->
+<!--            </if>-->
+<!--            <if test="ret != null">-->
+<!--                ret = #{ret},-->
+<!--            </if>-->
+<!--        </set>-->
+<!--        where id = #{id}-->
+<!--    </update>-->
+
+    <!--    <select id="findLogList" resultMap="BaseResultMap">-->
+
+    <!--        select * from borrow order by create_time-->
+
+    <!--    </select>-->
+
+    <!-- 模糊查询 倒序 -->
+    <select id="findPurchaseList" resultMap="BaseResultMap" >
+        select * from purchase
+        <where>
+            <if test="_parameter != null and _parameter != ''">
+                and `isbn` like CONCAT('%',#{_parameter},'%') or `bookname` like CONCAT('%',#{_parameter},'%')
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <update id="updatePurchase" parameterType="map">
+        update purchase
+        <set>
+            <if test="isbn != null and isbn != ''">
+                isbn = #{isbn},
+            </if>
+            <if test="bookname != null and bookname != ''">
+                `bookname` = #{bookname},
+            </if>
+            <if test="num != null">
+                num = #{num},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="bookType != null and bookType != ''">
+                `book_type` = #{bookType},
+            </if>
+            <if test="createTime != null">
+                `create_time` = #{createTime},
+            </if>
+            <if test="status != null">
+                `status` = #{status},
+            </if>
+            <if test="reason != null">
+                `reason` = #{reason}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>

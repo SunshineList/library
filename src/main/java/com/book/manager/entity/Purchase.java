@@ -9,6 +9,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.util.Date;
 
 
 /**
@@ -52,5 +53,8 @@ public class Purchase {
 
     @ApiModelProperty("状态  0 审核通过 1审核不通过")
     private String status;
+
+    @ApiModelProperty("创建时间")
+    private Date createTime;
 
 }

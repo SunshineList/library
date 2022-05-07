@@ -69,7 +69,7 @@
                     <th>翻译</th>
                     <th>分类</th>
                     <th>书籍图片</th>
-                    <th>操作</th>
+                    <th id="op" style="display: none">操作</th>
                 </tr>
                 </thead>
                 <tbody id="tbody">
@@ -90,12 +90,39 @@
 
 
 <script type="text/javascript">
-
+    var auth = 0;
     // 页面一加载, 展示数据列表, 每页10条
     $(document).ready(function () {
+        // 页面一加载, 读取登录用户信息, 进行权限限制
+        $.get("/user/currUser", function (data) {
+            var code = data.code;
+            var user = data.data;
+            if (code === 200) {
+                auth = user.identity;
+            }
+        })
         // 默认查询所有
         rander(1, "", 10);
     });
+
+
+    var handleValue = (value) => {
+        for (let x in value) {
+            if (value[x] === null) { // 如果是null 把直接内容转为 ''
+                value[x] = '';
+            } else {
+                if (Array.isArray(value[x])) { // 是数组遍历数组 递归继续处理
+                    value[x] = value[x].map(z => {
+                        return handleValue(z);
+                    });
+                }
+                if (typeof (value[x]) === 'object') { // 是json 递归继续处理
+                    value[x] = handleValue(value[x])
+                }
+            }
+        }
+        return value;
+    }
 
     // 渲染数据表格
     function rander(currPage, keyword, pageSize) {
@@ -123,15 +150,19 @@
                 var array = r.list;
                 var text = "";
                 $.each(array, function (index, value) {
-                	var pic = value.pic === null ? "" : value.pic
+                    value = handleValue(value)
                     var num = pageSize * (currPage - 1) + index + 1;
                     text += "<tr align='center'><td>" + num + "</td><td>" + value.name + "</td><td>" + value.author + "</td><td>" + value.isbn + "</td>" +
                         "<td>" + value.pages + "</td><td>" + value.price + "</td><td>" + value.publish + "</td><td>" + value.publishTime + "</td>" +
-                        "<td>" + value.size + "</td><td>" + value.translate + "</td><td>" + value.type + "</td><td style='width: 15%'><img style='width: 15%; height: auto' src=" + pic + "></td><td>" +
-                        "<button class='button blue empty' onclick='updateBook(" + value.id + ")'>编辑</button> &nbsp;<button class='button yellow empty' onclick='delBook(" + value.id + ")'>删除</button></td></tr>";
+                        "<td>" + value.size + "</td><td>" + value.translate + "</td><td>" + value.type + "</td><td style='width: 15%'><img style='width: 15%; height: auto' src=" + value.pic + "></td><td>" +
+                        "<button id='edit' class='button blue empty' onclick='updateBook(" + value.id + ")'>编辑</button> &nbsp;<button id='delete' class='button yellow empty' onclick='delBook(" + value.id + ")'>删除</button></td></tr>";
                 });
 
                 $("#tbody").html(text);
+
+                if (auth === 4 || auth === 0 || auth ===1){
+                    $("tr td:nth-child(13)").hide()
+                }
 
                 // 向上取整去总页数
                 var totalPage = Math.ceil(total / pageSize);
