@@ -90,7 +90,7 @@ public class JournalBorrowService {
         try {
             if (userSize>0) {
                 userSize --;
-                users.setSize(userSize);
+                users.setQkSize(userSize);
                 userService.updateUser(users);
             }else {
                 return Constants.USER_SIZE_NOT_ENOUGH;
