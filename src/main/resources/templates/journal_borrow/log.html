@@ -132,7 +132,7 @@
                     value = handleValue(value);
                     var ret = value.ret === 1 ? "未归还" : "已归还"
                     var num = pageSize * (currPage - 1) + index + 1;
-                    text += "<tr align='center'><td>" + num + "</td><td>" + value.username + "</td><td>" + value.bookname + "</td><td>" + value.createTime + "</td>" +
+                    text += "<tr align='center'><td>" + num + "</td><td>" + value.username + "</td><td>" + value.journalname + "</td><td>" + value.createTime + "</td>" +
                         "<td>" + value.endTime + "</td><td>" + value.updateTime + "</td><td>" + ret + "</td></tr>";
                 });
 

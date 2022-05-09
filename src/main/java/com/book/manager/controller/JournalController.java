@@ -25,7 +25,7 @@ public class JournalController {
 
     @ApiOperation("期刊搜索列表")
     @PostMapping("/list")
-    public R getBookList(@RequestBody PageIn pageIn) {
+    public R getJournalList(@RequestBody PageIn pageIn) {
         if (pageIn == null) {
             return R.fail(CodeEnum.PARAM_ERROR);
         }
@@ -34,32 +34,32 @@ public class JournalController {
 
     @ApiOperation("添加期刊")
     @PostMapping("/add")
-    public R addBook(@RequestBody Journal journal) {
+    public R addJournal(@RequestBody Journal journal) {
         return R.success(CodeEnum.SUCCESS,journalService.addJournal(journal));
     }
 
     @ApiOperation("编辑期刊")
     @PostMapping("/update")
-    public R modifyBook(@RequestBody Journal journal) {
+    public R modifyJournalk(@RequestBody Journal journal) {
         return R.success(CodeEnum.SUCCESS,journalService.updateJournal(journal));
     }
 
 
     @ApiOperation("期刊详情")
     @GetMapping("/detail")
-    public R bookDetail(Integer id) {
+    public R JournalDetail(Integer id) {
         return R.success(CodeEnum.SUCCESS,journalService.findJournalById(id));
     }
 
     @ApiOperation("期刊详情 根据ISSN获取")
     @GetMapping("/detailByIssn")
-    public R bookDetailByIsbn(String isbn) {
-        return R.success(CodeEnum.SUCCESS,journalService.findJournalByIssn(isbn));
+    public R JournalDetailByIsbn(String issn) {
+        return R.success(CodeEnum.SUCCESS,journalService.findJournalByIssn(issn));
     }
 
     @ApiOperation("删除期刊")
     @GetMapping("/delete")
-    public R delBook(Integer id) {
+    public R delJournal(Integer id) {
         journalService.deleteJournal(id);
         return R.success(CodeEnum.SUCCESS);
     }

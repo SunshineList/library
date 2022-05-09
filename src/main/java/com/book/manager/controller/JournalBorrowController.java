@@ -66,6 +66,8 @@ public class JournalBorrowController {
             return R.success(CodeEnum.USER_NOT_ENOUGH);
         }else if (result == Constants.BOOK_SIZE_NOT_ENOUGH) {
             return R.success(CodeEnum.BOOK_NOT_ENOUGH);
+        }else if (result == Constants.JOURNAL_ERROR){
+            return R.success(CodeEnum.NOT_ENOUGH_JOURNAL);
         }
         return R.success(CodeEnum.SUCCESS,Constants.OK);
     }

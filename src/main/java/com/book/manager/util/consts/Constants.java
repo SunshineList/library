@@ -12,6 +12,10 @@ public final class Constants {
     public static final int BOOK_SIZE_NOT_ENOUGH = -102;
     /** 用户已借过该图书 */
     public static final int BOOK_BORROWED = -201;
+
+    /** 期刊是否被借出 */
+    public static final int JOURNAL_ERROR = -202;
+
     /**　是　*/
     public static final int YES = 0;
     /**　否　*/

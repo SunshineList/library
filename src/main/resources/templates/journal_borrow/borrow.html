@@ -135,7 +135,6 @@
 
                     bookId = data.id;
 
-                    console.log(data.type);
                 });
             });
         }else {
@@ -228,7 +227,7 @@
 			userId = user.id;
             // 查找到用户, 进行借阅
             if (userId >0) {
-                var json = {"userId":userId,"bookId":bookId,"createTime":sTime,"endTime":eTime,"updateTime":""};
+                var json = {"userId":userId,"journalId":bookId,"createTime":sTime,"endTime":eTime,"updateTime":""};
                 // 借阅图书
                 $.ajax({
                     //请求方式

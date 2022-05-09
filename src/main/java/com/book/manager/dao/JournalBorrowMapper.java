@@ -20,6 +20,9 @@ public interface JournalBorrowMapper {
     @Select("select * from journal_borrow where user_id = #{userId} and journal_id = #{journalId} and ret = 1")
     JournalBorrow findBorrowByUserIdAndBookId(@Param("userId") Integer userId, @Param("journalId") Integer journalId);
 
+    @Select("select COUNT(*) from journal_borrow where journal_id = #{journalId} and ret = 1")
+    int findBorrowByBookId(int journalId);
+
     int updateBor(Map<String,Object> map);
 
     List<JournalBorrow> findLogList(String keyword);

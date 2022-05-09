@@ -18,7 +18,7 @@
         select * from journal
         <where>
             <if test="_parameter != null and _parameter != ''">
-               and `name` like CONCAT('%',#{_parameter},'%') or `isbn` like CONCAT('%',#{_parameter},'%')
+               and `name` like CONCAT('%',#{_parameter},'%') or `issn` like CONCAT('%',#{_parameter},'%')
             </if>
         </where>
         order by id desc

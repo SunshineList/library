@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.book.manager.dao.BorrowMapper">
-    <resultMap id="BaseResultMap" type="com.book.manager.entity.Borrow" >
+<mapper namespace="com.book.manager.dao.JournalBorrowMapper">
+    <resultMap id="BaseResultMap" type="com.book.manager.entity.JournalBorrow" >
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="user_id" property="userId" jdbcType="INTEGER" />
         <result column="journal_id" property="journalId" jdbcType="INTEGER" />
@@ -12,7 +12,7 @@
     </resultMap>
 
     <update id="updateBor" parameterType="map">
-        update borrow
+        update journal_borrow
         <set>
             <if test="userId != null">
                 user_id = #{userId},
@@ -37,10 +37,10 @@
     </update>
 
     <select id="findLogList" resultMap="BaseResultMap" >
-        select * from borrow
+        select * from journal_borrow
         <where>
             <if test="_parameter != null and _parameter != ''">
-                and `username` like CONCAT('%',#{_parameter},'%') or `bookname` like CONCAT('%',#{_parameter},'%')
+                and `username` like CONCAT('%',#{_parameter},'%') or `journalname` like CONCAT('%',#{_parameter},'%')
             </if>
         </where>
         order by create_time desc, ret desc

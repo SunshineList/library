@@ -76,13 +76,15 @@ public class JournalService {
      * @return
      */
     public JournalOut findJournalByIssn(String issn) {
-        Journal Journal = JournalRepository.findByIssn(issn);
+        System.out.println(issn);
+        Journal journal = JournalRepository.findByIssn(issn);
+        System.out.println(journal);
         JournalOut out = new JournalOut();
-        if (Journal == null) {
+        if (journal == null) {
             return out;
         }
-        BeanUtil.copyProperties(Journal,out);
-        out.setPublishTime(DateUtil.format(Journal.getPublishTime(),"yyyy-MM-dd"));
+        BeanUtil.copyProperties(journal,out);
+        out.setPublishTime(DateUtil.format(journal.getPublishTime(),"yyyy-MM-dd"));
         return out;
     }
 

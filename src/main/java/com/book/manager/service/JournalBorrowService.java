@@ -55,6 +55,16 @@ public class JournalBorrowService {
         // 查询是否已经借阅过该图书
         JournalBorrow bor = findBorrowByUserIdAndBookId(users.getId(),journal.getId());
 
+        int isBorrow = findBorrowByBookId(journal.getId());
+
+        /**
+         * 一本只能借一次
+         */
+
+        if (isBorrow >= 1){
+            return Constants.JOURNAL_ERROR;
+        }
+
         if (bor!=null) {
             Integer ret = bor.getRet();
             if (ret!=null) {
@@ -77,20 +87,24 @@ public class JournalBorrowService {
 
         // 用户可借数量减一
         int userSize = users.getQkSize();
-        if (userSize>0) {
-            userSize --;
-            users.setSize(userSize);
-            userService.updateUser(users);
-        }else {
+        try {
+            if (userSize>0) {
+                userSize --;
+                users.setSize(userSize);
+                userService.updateUser(users);
+            }else {
+                return Constants.USER_SIZE_NOT_ENOUGH;
+            }
+
+        }catch (Exception e){
             return Constants.USER_SIZE_NOT_ENOUGH;
         }
-
 
         // 添加借阅信息, 借阅默认为未归还状态
         journalBorrow.setRet(Constants.NO);
         journalBorrow.setUsername(users.getUsername());
         journalBorrow.setJournalname(journal.getName());
-        journalRepository.save(journal);
+        journalBorrowRepository.save(journalBorrow);
 
         // 一切正常
         return Constants.OK;
@@ -156,8 +170,15 @@ public class JournalBorrowService {
      * @param userId 用户id
      * @param journalId 图书id
      */
-    public JournalBorrow findBorrowByUserIdAndBookId(int userId,int journalId) {
+    public JournalBorrow findBorrowByUserIdAndBookId(int userId, int journalId) {
         return journalBorrowMapper.findBorrowByUserIdAndBookId(userId,journalId);
+    }
+
+    /**
+     * 查看某本期刊是否被借出了
+     */
+    public int findBorrowByBookId(int journalId){
+        return journalBorrowMapper.findBorrowByBookId(journalId);
     }
 
     /**
