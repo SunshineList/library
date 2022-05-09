@@ -103,11 +103,19 @@
 				</div>
 
 				<div class="unit clear">
-					<div class="left"><span class="required"></span><p class="subtitle">可借数量</p></div>
+					<div class="left"><span class="required"></span><p class="subtitle">可借图书数</p></div>
 					<div class="right">
 						<input type="text" class="text" id="size" name="size"/>
 					</div>
 				</div>
+
+				<div class="unit clear">
+					<div class="left"><span class="required"></span><p class="subtitle">可借期刊数</p></div>
+					<div class="right">
+						<input type="text" class="text" id="qksize" name="qkSize"/>
+					</div>
+				</div>
+
 				<br>
 				<br>
 
@@ -142,9 +150,10 @@
 		var email = $("#email").val();
 		var address = $("#address").val();
 		var size = $("#size").val();
+		var qksize = $("#qksize").val();
         var identity = $('#select option:selected').val();// 身份
 
-		if (nickname == ""||nickname.length>12) {
+		if (nickname === ""||nickname.length>12) {
             javaex.message({
                 content : "昵称不能为空且长度不能大于12",
                 type : "error"
@@ -152,7 +161,7 @@
             return false;
 		}
 
-        if (username == ""||username.length>12) {
+        if (username === ""||username.length>12) {
             javaex.message({
                 content : "用户名不能为空且长度不能大于12",
                 type : "error"
@@ -160,7 +169,7 @@
 			return false;
         }
 
-        if (password == ""||password.length>18) {
+        if (password === ""||password.length>18) {
             javaex.message({
                 content : "密码不能为空且长度不能大于18",
                 type : "error"
@@ -168,7 +177,7 @@
             return false;
         }
 
-		var json = {"nickname":nickname,"username":username,"password":password,"birthday":birthday,"tel":tel,"email":email,"address":address,"size":size,"identity":identity};
+		var json = {"nickname":nickname,"username":username,"password":password,"birthday":birthday,"tel":tel,"email":email,"address":address,"size":size,"identity":identity, "qkSize": qksize};
         $.ajax({
             //请求方式
             type : "POST",
@@ -185,7 +194,7 @@
                 var data = result.data;
                 var code = result.code;
 
-                if (code == 200) {
+                if (code === 200) {
                     javaex.message({
                         content : "添加成功",
                         type : "success"

@@ -96,11 +96,19 @@
 				</div>
 
 				<div class="unit clear">
-					<div class="left"><span class="required"></span><p class="subtitle">可借数量</p></div>
+					<div class="left"><span class="required"></span><p class="subtitle">可借图书数</p></div>
 					<div class="right">
 						<input type="text" class="text" id="size" name="size" readonly="readonly"/>
 					</div>
 				</div>
+
+				<div class="unit clear">
+					<div class="left"><span class="required"></span><p class="subtitle">可借期刊数</p></div>
+					<div class="right">
+						<input type="text" class="text" id="qksize" name="qkSize" readonly="readonly"/>
+					</div>
+				</div>
+
 				<br>
 				<br>
 			</form>
@@ -127,6 +135,7 @@
             $("#email").val(user.email);
             $("#address").val(user.address);
             $("#size").val(user.size);
+            $("#qksize").val(user.qkSize)
             $("#ident").val(user.ident);
 
             return false;

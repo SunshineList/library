@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.book.manager.dao.JournalMapper">
+    <resultMap id="BaseResultMap" type="com.book.manager.entity.Journal" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="issn" property="issn" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="author" property="author" jdbcType="VARCHAR" />
+        <result column="pages" property="pages" jdbcType="INTEGER" />
+        <result column="publish" property="publish" jdbcType="VARCHAR" />
+        <result column="price" property="price" jdbcType="INTEGER" />
+        <result column="size" property="size" jdbcType="INTEGER" />
+        <result column="publish_time" property="publishTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <!-- 模糊查询 倒序 -->
+    <select id="findJournalListByLike" resultMap="BaseResultMap" >
+        select * from journal
+        <where>
+            <if test="_parameter != null and _parameter != ''">
+               and `name` like CONCAT('%',#{_parameter},'%') or `isbn` like CONCAT('%',#{_parameter},'%')
+            </if>
+        </where>
+        order by id desc
+    </select>
+
+
+    <update id="updateJournal" parameterType="map">
+        update journal
+        <set>
+            <if test="issn != null and issn != ''">
+                issn = #{issn},
+            </if>
+            <if test="name != null and name != ''">
+                `name` = #{name},
+            </if>
+            <if test="pages != null">
+                pages = #{pages},
+            </if>
+            <if test="publish != null and publish != ''">
+                publish = #{publish},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="size != null">
+                `size` = #{size},
+            </if>
+            <if test="publishTime != null">
+                publish_time = #{publishTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

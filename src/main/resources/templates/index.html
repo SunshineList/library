@@ -63,15 +63,32 @@
 									<li><a id="add-book" href="javascript:page('book/book-add');">图书上架</a></li>
 								</ul>
                             </li>
+
+							<li class="menu-item" id="journal">
+								<a href="javascript:;">期刊管理<i class="icon-keyboard_arrow_left"></i></a>
+								<ul>
+									<li><a id="journal-list" href="javascript:page('journal/journal-list');">期刊列表</a></li>
+									<li><a id="add-journal" href="javascript:page('journal/journal-add');">期刊上架</a></li>
+								</ul>
+							</li>
                             
 							<li class="menu-item" id="borrow">
-								<a href="javascript:;">借阅管理<i class="icon-keyboard_arrow_left"></i></a>
+								<a href="javascript:;">图书借阅管理<i class="icon-keyboard_arrow_left"></i></a>
 								<ul>
 									<li><a id="book-search" href="javascript:page('borrow/book-search');">搜索图书</a></li>
                                     <li><a id="book-borrow" href="javascript:page('borrow/borrow');">借阅图书</a></li>
                                     <li><a id="book-back" href="javascript:page('borrow/back');">归还图书</a></li>
 								</ul>
                             </li>
+
+							<li class="menu-item" id="journal_borrow">
+								<a href="javascript:;">期刊借阅管理<i class="icon-keyboard_arrow_left"></i></a>
+								<ul>
+									<li><a id="journal-search" href="javascript:page('journal_borrow/search');">搜索期刊</a></li>
+									<li><a id="journal-borrow" href="javascript:page('journal_borrow/borrow');">借阅期刊</a></li>
+									<li><a id="journal-back" href="javascript:page('journal_borrow/back');">归还期刊</a></li>
+								</ul>
+							</li>
 
                             <li class="menu-item" id="reader">
 								<a href="javascript:;">读者管理<i class="icon-keyboard_arrow_left"></i></a>
@@ -102,7 +119,8 @@
 							<li class="menu-item" id="log_m">
 								<a href="javascript:;">日志管理<i class="icon-keyboard_arrow_left"></i></a>
 								<ul>
-									<li><a id="log" href="javascript:page('borrow/log');">借阅日志</a></li>
+									<li><a id="log" href="javascript:page('borrow/log');">图书借阅日志</a></li>
+									<li><a id="journal_log" href="javascript:page('journal_borrow/log');">期刊借阅日志</a></li>
 								</ul>
 							</li>
 
@@ -188,6 +206,8 @@
 					$("#user").hide();
 					$("#borrow").hide();
 					$("#log_m").hide();
+					$("#journal").hide();
+					$("#journal-borrow").hide();
 				}
 			}
 

@@ -103,9 +103,16 @@
 				</div>
 
 				<div class="unit clear">
-					<div class="left"><span class="required"></span><p class="subtitle">可借数量</p></div>
+					<div class="left"><span class="required"></span><p class="subtitle">可借图书数</p></div>
 					<div class="right">
 						<input type="text" class="text" id="size" name="size"/>
+					</div>
+				</div>
+
+				<div class="unit clear">
+					<div class="left"><span class="required"></span><p class="subtitle">可借期刊数</p></div>
+					<div class="right">
+						<input type="text" class="text" id="qksize" name="qkSize"/>
 					</div>
 				</div>
 				<br>
@@ -142,6 +149,7 @@
 		var email = $("#email").val();
 		var address = $("#address").val();
 		var size = $("#size").val();
+		var qksize = $("#qksize").val();
         var identity = $('#select option:selected').val();// 身份
 
 		if (nickname == ""||nickname.length>12) {
@@ -168,7 +176,7 @@
             return false;
         }
 
-		var json = {"nickname":nickname,"username":username,"password":password,"birthday":birthday,"tel":tel,"email":email,"address":address,"size":size,"identity":identity};
+		var json = {"nickname":nickname,"username":username,"password":password,"birthday":Date.parse(birthday),"tel":tel,"email":email,"address":address,"size":size, 'qkSize': qksize, "identity":identity};
         $.ajax({
             //请求方式
             type : "POST",

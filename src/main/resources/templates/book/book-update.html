@@ -126,15 +126,15 @@
                     </div>
                 </div>
 
-                <div class="unit clear">
-                    <div class="left"><span class="required"></span>
-                        <p class="subtitle">书籍图片</p></div>
-                    <div class="right">
-                        <img src="" alt="" id="img" style="width: 30%;height: auto;"/>
-                        <input type="file" name="file" id="uploadImage" onchange="postData()">
-                        <!--                        <div id="drop_area"></div>-->
-                    </div>
-                </div>
+<!--                <div class="unit clear">-->
+<!--                    <div class="left"><span class="required"></span>-->
+<!--                        <p class="subtitle">书籍图片</p></div>-->
+<!--                    <div class="right">-->
+<!--                        <img src="" alt="" id="img" style="width: 30%;height: auto;"/>-->
+<!--                        <input type="file" name="file" id="uploadImage" onchange="postData()">-->
+<!--                        &lt;!&ndash;                        <div id="drop_area"></div>&ndash;&gt;-->
+<!--                    </div>-->
+<!--                </div>-->
 
                 <!--提交按钮-->
                 <div class="unit clear" style="width: 800px;">
@@ -172,7 +172,6 @@
             $("#translate").val(data.translate);
             $("#type").text(data.type);
             $("#img").attr('src',data.pic);
-            console.log(data.type);
         });
 
     });
@@ -220,8 +219,8 @@
         var bookName = $("#bookName").val();
         var isbn = $("#isbn").val();
         var author = $("#author").val();
-        var select = $('#select option:selected').text();// 类目
-        if (select == "" || select == "请选择") {
+        var select = $('#select option:selected').val();// 类目
+        if (select === "" || select === "请选择") {
             select = $("#type").text();
         }
         var pages = $("#pages").val();
@@ -232,7 +231,7 @@
         var translate = $("#translate").val();
 
         // 校验文本
-        if (bookName == "") {
+        if (bookName === "") {
             javaex.optTip({
                 content: "图书名称不能为空!",
                 type: "error"
@@ -241,7 +240,7 @@
             return false;
         }
 
-        if (isbn == "") {
+        if (isbn === "") {
             javaex.optTip({
                 content: "ISBN图书编码不能为空!",
                 type: "error"
@@ -250,7 +249,7 @@
             return false;
         }
 
-        if (author == "") {
+        if (author === "") {
             javaex.optTip({
                 content: "图书作者不能为空!",
                 type: "error"
@@ -259,7 +258,7 @@
             return false;
         }
 
-        if (select == "") {
+        if (select === "") {
             javaex.optTip({
                 content: "图书分类不能为空!",
                 type: "error"
@@ -282,7 +281,7 @@
             "size": size,
             "type": select,
             "publishTime": publishTime,
-            "pic": pic
+            "pic": pic === "" ? $("#img").attr('src') : pic
         };
 
         // 提交
@@ -303,8 +302,8 @@
                 var data = result.data;
                 var code = result.code;
 
-                if (code == 200) {
-                    if (data == false) {
+                if (code === 200) {
+                    if (data === false) {
                         javaex.message({
                             content: "修改失败",
                             type: "error"

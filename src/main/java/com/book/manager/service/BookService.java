@@ -5,6 +5,8 @@ import cn.hutool.core.date.DateUtil;
 import com.book.manager.dao.BookMapper;
 import com.book.manager.entity.Book;
 import com.book.manager.repos.BookRepository;
+import com.book.manager.util.consts.Constants;
+import com.book.manager.util.consts.ConvertUtil;
 import com.book.manager.util.vo.BookOut;
 import com.book.manager.util.vo.PageOut;
 import com.book.manager.util.ro.PageIn;
@@ -62,6 +64,7 @@ public class BookService {
             Book book = optional.get();
             BookOut out = new BookOut();
             BeanUtil.copyProperties(book,out);
+            out.setType(ConvertUtil.bookType(out.getType()));
             out.setPublishTime(DateUtil.format(book.getPublishTime(),"yyyy-MM-dd"));
             return out;
         }
@@ -117,6 +120,7 @@ public class BookService {
         for (Book book : pageInfo.getList()) {
             BookOut out = new BookOut();
             BeanUtil.copyProperties(book,out);
+            out.setType(ConvertUtil.bookType(out.getType()));
             out.setPublishTime(DateUtil.format(book.getPublishTime(),"yyyy-MM-dd"));
             bookOuts.add(out);
         }

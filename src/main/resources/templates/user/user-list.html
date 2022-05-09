@@ -62,7 +62,8 @@
 					<th>电话</th>
 					<th>邮箱</th>
 					<th>地址</th>
-					<th>可借数量</th>
+					<th>可借图书数</th>
+					<th>可借期刊数</th>
 					<th>身份</th>
 					<th>操作</th>
 				</tr>
@@ -138,8 +139,7 @@
                 	value = handleValue(value)
                     var num = pageSize * (currPage - 1) + index + 1;
                     text+= "<tr align='center'><td>"+num+"</td><td>"+value.nickname+"</td><td>"+value.username+"</td><td>"+value.birth+"</td>" +
-                        "<td>"+value.tel+"</td><td>"+value.email+"</td><td>"+value.address+"</td><td>"+value.size+"</td>" +
-                        "<td>"+value.ident+"</td><td>"+
+                        "<td>"+value.tel+"</td><td>"+value.email+"</td><td>"+value.address+"</td><td>"+value.size+ "</td><td>"+value.qkSize+"</td><td>"+value.ident+"</td><td>"+
                         "<button class='button green' onclick='updateUser("+value.id+","+value.isAdmin+")'>提权</button> &nbsp;<button class='button yellow empty' onclick='delUser("+value.id+")'>删除</button></td></tr>";
                 });
 

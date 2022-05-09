@@ -3,13 +3,13 @@
 <head>
     <meta charset="utf-8">
     <!--字体图标-->
-    <link href="../../javaex/pc/css/icomoon.css" rel="stylesheet" />
+    <link href="../../javaex/pc/css/icomoon.css" rel="stylesheet"/>
     <!--动画-->
-    <link href="../../javaex/pc/css/animate.css" rel="stylesheet" />
+    <link href="../../javaex/pc/css/animate.css" rel="stylesheet"/>
     <!--骨架样式-->
-    <link href="../../javaex/pc/css/common.css" rel="stylesheet" />
+    <link href="../../javaex/pc/css/common.css" rel="stylesheet"/>
     <!--皮肤（缇娜）-->
-    <link href="../../javaex/pc/css/skin/tina.css" rel="stylesheet" />
+    <link href="../../javaex/pc/css/skin/tina.css" rel="stylesheet"/>
     <!--jquery，不可修改版本-->
     <script src="../../javaex/pc/lib/jquery-1.7.2.min.js"></script>
     <!--全局动态修改-->
@@ -84,8 +84,9 @@
                     <div class="left"><span class="required">*</span>
                         <p class="subtitle">图书分类</p></div>
                     <div class="right">
+                        <span id="type" style="color: #2db7f5"></span>
                         <select id="select">
-                            <option value="">请选择</option>
+                            <option value="" id="opt">请选择</option>
                             <option value="1">马克思主义、列宁主义、毛泽东思想、邓小平理论</option>
                             <option value="2">哲学、宗教</option>
                             <option value="3">文化、科学、教育、体育</option>
@@ -113,28 +114,30 @@
 
 <script>
 
-    javaex.select({
-        id : "select",
-        isSearch : false
-    });
-
     // 页面加载执行
-    $(document).ready(function(){
+    $(document).ready(function () {
         var id = getQueryVariable("id");
         // get读取参数
-        $.get("/purchase/detail",{"id": id}, function(data){
+        $.get("/purchase/detail", {"id": id}, function (data) {
             var purchase = data.data;
             $("#bookname").val(purchase.bookname);
             $("#num").val(purchase.num);
             $("#price").val(purchase.price);
             $("#isbn").val(purchase.isbn);
             $("#reason").val(purchase.reason);
-            // $("#select").text(purchase.bookType);
-            var value = purchase.bookType
-            $("#select").find("option[text=\""+value+"\\").attr("selected",true);
-            return false;
+            $("#type").text(purchase.bookType)
         });
     });
+
+    javaex.select({
+        id: "select",
+        isSearch: false,
+        maxNum: 5,
+        callback: function (rtn) {
+            $("#type").text("");
+        }
+    });
+
 
     // 监听点击保存按钮事件
     $("#save").click(function () {
@@ -145,8 +148,10 @@
         var isbn = $("#isbn").val();
         var reason = $("#reason").val();
         var status = 2;
-        var bookType = $("#select").find("option:selected").text();//$('#select option:selected').text()
+        var bookType = $('#select option:selected').val();
 
+        console.log("******")
+        console.log(bookType)
         if (bookname === "") {
             javaex.message({
                 content: "书名不能为空",
@@ -244,17 +249,19 @@
     });
 
     // 监听点击返回按钮事件
-    $("#return").click(function() {
-        window.location.href="/purchase/purchase-list"
+    $("#return").click(function () {
+        window.location.href = "/purchase/purchase-list"
     });
 
     // 获取地址栏参数
-    function getQueryVariable(variable){
+    function getQueryVariable(variable) {
         var query = window.location.search.substring(1);
         var vars = query.split("&");
-        for (var i=0;i<vars.length;i++) {
+        for (var i = 0; i < vars.length; i++) {
             var pair = vars[i].split("=");
-            if(pair[0] == variable){return pair[1];}
+            if (pair[0] == variable) {
+                return pair[1];
+            }
         }
         return false;
     }

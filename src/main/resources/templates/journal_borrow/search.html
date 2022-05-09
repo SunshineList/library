@@ -18,27 +18,27 @@
 <script src="../../javaex/pc/js/javaex.min.js"></script>
 <!--表单验证-->
 <script src="../../javaex/pc/js/javaex-formVerify.js"></script>
-<title>后台管理</title>
+	<title>后台管理</title>
 </head>
 
 <body>
-    <!--主体内容-->
+<!--主体内容-->
 <div class="list-content">
 	<!--块元素-->
 	<div class="block">
 		<!--页面有多个表格时，可以用于标识表格-->
-		<h2>读者列表</h2>
+		<h2>期刊搜索</h2>
 		<!--右上角的返回按钮-->
 		<a href="javascript:history.back();">
 			<button class="button indigo radius-3" style="position: absolute;right: 20px;top: 16px;"><span class="icon-arrow_back"></span> 返回</button>
 		</a>
-		
+
 		<!--正文内容-->
 		<div class="main">
 			<!--表格上方的搜索操作-->
-			<div class="admin-search">
+			<div class="main">
 				<div class="input-group">
-					<input id="keyword" type="text" class="text" placeholder="搜索用户名或者昵称" />
+					<input id="keyword" type="text" class="text" style="width: 400px" placeholder="搜索想要借阅的期刊" />
 					<button id="searchBtn" class="button blue" onclick="search();">搜索</button>
 				</div>
 			</div>
@@ -56,15 +56,14 @@
 				<thead>
 				<tr align="center">
 					<th>序号</th>
-					<th>昵称</th>
-					<th>用户名</th>
-					<th>生日</th>
-					<th>电话</th>
-					<th>邮箱</th>
-					<th>地址</th>
-					<th>可借图书数</th>
-					<th>可借期刊数</th>
-					<th>身份</th>
+					<th>期刊名</th>
+					<th>作者</th>
+					<th>ISSN</th>
+					<th>页数</th>
+					<th>定价</th>
+					<th>出版社</th>
+					<th>出版时间</th>
+					<th>库存数量</th>
 					<th>操作</th>
 				</tr>
 				</thead>
@@ -81,73 +80,58 @@
 				<ul id="page" class="pagination"></ul>
 			</div>
 		</div>
-    </div>
+	</div>
 </div>
 
 
-<script>
+<script type="text/javascript">
+
     // 页面一加载, 展示数据列表, 每页10条
     $(document).ready(function(){
         // 默认查询所有
         rander(1,"",10);
     });
 
-	var handleValue = (value) => {
-		for (let x in value) {
-			if (value[x] === null) { // 如果是null 把直接内容转为 ''
-				value[x] = '';
-			} else {
-				if (Array.isArray(value[x])) { // 是数组遍历数组 递归继续处理
-					value[x] = value[x].map(z => {
-						return handleValue(z);
-					});
-				}
-				if(typeof(value[x]) === 'object'){ // 是json 递归继续处理
-					value[x] = handleValue(value[x])
-				}
-			}
-		}
-		return value;
-	}
-
     // 渲染数据表格
     function rander(currPage,keyword,pageSize) {
         // 定义全局 分页属性
+        var total = 0;
         $.ajax({
             //请求方式
             type : "POST",
             //请求的媒体类型
             contentType: "application/json;charset=UTF-8",
             //请求地址
-            url : "/user/list",
+            url : "/journal/list",
             //数据，json字符串
-            data : JSON.stringify({"currPage":currPage,"keyword": keyword,"pageSize": pageSize, "ident": "1"}),
+            data : JSON.stringify({"currPage":currPage,"keyword": keyword,"pageSize": pageSize}),
             //请求成功
             success : function(result) {
                 console.log(result);
                 // 获取集合属性
                 var r = result.data;
-                var total = r.total;
-                var currPage = r.currPage;
-                var pageSize = r.pageSize;
                 // 分页信息
-                console.log("currPage:"+r.currPage+"pageSize:"+r.pageSize+"total:"+r.total);
+                currPage = r.currPage;
+                pageSize = r.pageSize;
+                total = r.total;
+
+                console.log("currPage:"+currPage+"pageSize:"+pageSize+"total:"+total);
 
                 var array = r.list;
                 var text = "";
                 $.each(array,function(index,value){
-                	value = handleValue(value)
+                    console.log(value);
                     var num = pageSize * (currPage - 1) + index + 1;
-                    text+= "<tr align='center'><td>"+num+"</td><td>"+value.nickname+"</td><td>"+value.username+"</td><td>"+value.birth+"</td>" +
-                        "<td>"+value.tel+"</td><td>"+value.email+"</td><td>"+value.address+"</td><td>"+value.size+"</td>" +"</td><td>"+value.qkSize+"</td>"+ "<td>"+value.ident+"</td><td>"+
-                        "<button class='button blue empty' onclick='updateBook("+value.id+")'>编辑</button> &nbsp;<button class='button yellow empty' onclick='delBook("+value.id+")'>删除</button></td></tr>";
+                    text+= "<tr align='center'><td>"+num+"</td><td>"+value.name+"</td><td>"+value.author+"</td><td>"+value.isbn+"</td>" +
+                        "<td>"+value.pages+"</td><td>"+value.price+"</td><td>"+value.publish+"</td><td>"+value.publishTime+"</td>" +
+                        "<td>"+value.size+"</td><td>"+value.translate+"</td><td>"+value.type+"</td><td>"+
+                        "<button class='button blue empty' onclick='borrowBook("+value.id+")'>借阅</button></td></tr>";
                 });
 
                 $("#tbody").html(text);
 
                 // 向上取整去总页数
                 var totalPage = Math.ceil(total/pageSize);
-                console.log("totalPage:"+totalPage);
                 // 清空分页组件
                 $("#page").empty();
                 // 调用分页组件
@@ -155,7 +139,7 @@
                     id : "page",
                     pageCount : totalPage,	// 总页数
                     currentPage : currPage,// 默认选中第几页
-                    perPageCount : pageSize ,	// 每页显示多少条，不填时，不显示该条数选择控件
+                    perPageCount : pageSize,	// 每页显示多少条，不填时，不显示该条数选择控件
                     isShowJumpPage : false,	// 是否显示跳页
                     totalNum : total,		// 总条数，不填时，不显示
                     position : "center",
@@ -181,39 +165,20 @@
         rander(1,keyword,10);
     }
 
-    // 编辑
-    function updateBook(id) {
-        console.log("update reader"+id);
-        window.location.href="/reader/reader-update?id="+id;
-    }
-
-    // 删除
-    function delBook(id) {
-        console.log("delete reader"+id);
+    // 借阅图书
+    function borrowBook(id) {
         javaex.confirm({
-            content : "确定要删除么",
-            callback : "delCallback("+id+")"
+            content : "确定要借阅么",
+            callback : "forwardBorrow("+id+")"
         });
     }
 
-    function delCallback(id) {
-        // ajax
-        $.get("/user/delete",{"id": id},
-            function(data){
-                var code = data.code;
-                if (code == 200) {
-                    javaex.message({
-                        content : "删除成功",
-                        type : "success"
-                    });
+    function forwardBorrow(id) {
 
-                    // 删除成功刷新页面
-                    setTimeout(function(){window.location.reload();},1500)
-
-                }
-            });
-        // 如果你想阻止弹出层关闭，直接 return false; 即可
-        //return false;
+        var url = "/borrow/borrow?id="+id;
+        // 跳转借阅界面
+        window.location.href = "/borrow/borrow?id="+id;
+        // $("#bb", parent.document).click();
     }
 </script>
 </body>

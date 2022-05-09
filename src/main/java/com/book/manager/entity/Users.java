@@ -59,6 +59,9 @@ public class Users {
     @ApiModelProperty("可借数量")
     private Integer size;
 
+    @ApiModelProperty("期刊可借数量")
+    private Integer qkSize;
+
     @ApiModelProperty("身份：0 普通读者,1 vip读者,2 图书超级管理员,3 超级管理员,4 采购员")
     private Integer identity;
 

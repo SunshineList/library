@@ -126,7 +126,7 @@
         var isbn = $("#isbn").val();
         var reason = $("#reason").val();
         var status = 2;
-        var bookType = $('#select option:selected').text()
+        var bookType = $('#select option:selected').val()
 
         if (bookname === "") {
             javaex.message({
@@ -194,7 +194,7 @@
                 var data = result.data;
                 var code = result.code;
 
-                if (code == 200) {
+                if (code === 200) {
                     javaex.message({
                         content: "添加成功",
                         type: "success"

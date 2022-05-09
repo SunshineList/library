@@ -90,6 +90,7 @@ public class PurchaseService {
             Purchase purchase = optional.get();
             PurchaseOut out = new PurchaseOut();
             BeanUtil.copyProperties(purchase,out);
+            out.setBookType(ConvertUtil.bookType(out.getBookType()));
             out.setCreateTime(DateUtil.format(purchase.getCreateTime(),"yyyy-MM-dd"));
             out.setStatus(ConvertUtil.statusPurchase(purchase.getStatus()));
             return out;
@@ -117,6 +118,7 @@ public class PurchaseService {
             PurchaseOut out = new PurchaseOut();
             BeanUtil.copyProperties(purchase, out);
             out.setStatus(ConvertUtil.statusPurchase(out.getStatus()));
+            out.setBookType(ConvertUtil.bookType(out.getBookType()));
             out.setCreateTime(DateUtil.format(purchase.getCreateTime(),"yyyy-MM-dd"));
             purchaseOuts.add(out);
         }
