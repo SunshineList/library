@@ -31,5 +31,5 @@ public interface JournalBorrowRepository extends JpaRepository<JournalBorrow, In
      * @param userId 用户id
      * @param journalId 图书id
      */
-    JournalBorrow findBorrowByUserIdAndBookId(@Param("userId") Integer userId, @Param("bookId") Integer journalId);
+    JournalBorrow findBorrowByUserIdAndJournalId(@Param("userId") Integer userId, @Param("journalId") Integer journalId);
 }

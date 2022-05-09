@@ -115,16 +115,14 @@
                 pageSize = r.pageSize;
                 total = r.total;
 
-                console.log("currPage:"+currPage+"pageSize:"+pageSize+"total:"+total);
-
                 var array = r.list;
                 var text = "";
                 $.each(array,function(index,value){
                     console.log(value);
                     var num = pageSize * (currPage - 1) + index + 1;
-                    text+= "<tr align='center'><td>"+num+"</td><td>"+value.name+"</td><td>"+value.author+"</td><td>"+value.isbn+"</td>" +
+                    text+= "<tr align='center'><td>"+num+"</td><td>"+value.name+"</td><td>"+value.author+"</td><td>"+value.issn+"</td>" +
                         "<td>"+value.pages+"</td><td>"+value.price+"</td><td>"+value.publish+"</td><td>"+value.publishTime+"</td>" +
-                        "<td>"+value.size+"</td><td>"+value.translate+"</td><td>"+value.type+"</td><td>"+
+                        "<td>"+value.size+"</td><td>"+
                         "<button class='button blue empty' onclick='borrowBook("+value.id+")'>借阅</button></td></tr>";
                 });
 

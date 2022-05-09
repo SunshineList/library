@@ -116,10 +116,10 @@
         // 地址栏参数
         bookId = getQueryVariable("id");
         if (bookId == null||bookId == "") {
-            $("#isbn").removeAttr("readonly");
+            $("#issn").removeAttr("readonly");
             // 监听输入框
             $("#issn").bind("input propertychange",function(event){
-                var isbn = $("#issn").val();
+                var issn = $("#issn").val();
                 console.log(issn);
                 $.get("/journal/detailByIssn",{"issn": issn}, function(data){
                     var data = data.data;

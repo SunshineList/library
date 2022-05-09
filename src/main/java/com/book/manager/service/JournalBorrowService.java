@@ -154,10 +154,10 @@ public class JournalBorrowService {
     /**
      * 查询用户某一条借阅信息
      * @param userId 用户id
-     * @param bookId 图书id
+     * @param journalId 图书id
      */
-    public JournalBorrow findBorrowByUserIdAndBookId(int userId,int bookId) {
-        return journalBorrowMapper.findBorrowByUserIdAndBookId(userId,bookId);
+    public JournalBorrow findBorrowByUserIdAndBookId(int userId,int journalId) {
+        return journalBorrowMapper.findBorrowByUserIdAndBookId(userId,journalId);
     }
 
     /**

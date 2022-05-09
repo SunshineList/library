@@ -44,7 +44,7 @@ import java.util.List;
 public class JournalBorrowController {
 
     @Autowired
-    private JournalBorrowService borrowService;
+    private JournalBorrowService journalBorrowService;
 
     @Autowired
     private JournalService journalService;
@@ -53,13 +53,13 @@ public class JournalBorrowController {
     @ApiOperation("借阅列表")
     @GetMapping("/list")
     public R getBorrowList(Integer userId) {
-        return R.success(CodeEnum.SUCCESS,borrowService.findAllBorrowByUserId(userId));
+        return R.success(CodeEnum.SUCCESS,journalBorrowService.findAllBorrowByUserId(userId));
     }
 
     @ApiOperation("借阅图书")
     @PostMapping("/add")
     public R addBorrow(@RequestBody JournalBorrow journalBorrow) {
-        Integer result = borrowService.addBorrow(journalBorrow);
+        Integer result = journalBorrowService.addBorrow(journalBorrow);
         if (result == Constants.BOOK_BORROWED) {
             return R.success(CodeEnum.BOOK_BORROWED);
         }else if (result == Constants.USER_SIZE_NOT_ENOUGH) {
@@ -73,20 +73,20 @@ public class JournalBorrowController {
     @ApiOperation("编辑借阅")
     @PostMapping("/update")
     public R modifyBorrow(@RequestBody JournalBorrow journalBorrow) {
-        return R.success(CodeEnum.SUCCESS,borrowService.updateBorrow(journalBorrow));
+        return R.success(CodeEnum.SUCCESS,journalBorrowService.updateBorrow(journalBorrow));
     }
 
 
     @ApiOperation("借阅详情")
     @GetMapping("/detail")
     public R borrowDetail(Integer id) {
-        return R.success(CodeEnum.SUCCESS,borrowService.findById(id));
+        return R.success(CodeEnum.SUCCESS,journalBorrowService.findById(id));
     }
 
     @ApiOperation("删除归还记录")
     @GetMapping("/delete")
     public R delBorrow(Integer id) {
-        borrowService.deleteBorrow(id);
+        journalBorrowService.deleteBorrow(id);
         return R.success(CodeEnum.SUCCESS);
     }
 
@@ -97,7 +97,7 @@ public class JournalBorrowController {
         List<JournalBackOut> outs = new ArrayList<>();
         if (userId!=null&&userId>0) {
             // 获取所有 已借阅 未归还书籍
-            List<JournalBorrow> borrows = borrowService.findBorrowsByUserIdAndRet(userId, Constants.NO);
+            List<JournalBorrow> borrows = journalBorrowService.findBorrowsByUserIdAndRet(userId, Constants.NO);
             for (JournalBorrow journalBorrow : borrows) {
                 JournalBackOut backOut = new JournalBackOut();
                 Journal out = journalService.findJournal(journalBorrow.getJournalId());
@@ -125,9 +125,9 @@ public class JournalBorrowController {
 
     @ApiOperation("归还书籍")
     @PostMapping("/ret")
-    public R retBook(Integer userId, Integer bookId) {
+    public R retBook(Integer userId, Integer journalId) {
         // 归还图书
-        borrowService.retBook(userId,bookId);
+        journalBorrowService.retBook(userId,journalId);
         return R.success(CodeEnum.SUCCESS);
     }
 
@@ -141,7 +141,7 @@ public class JournalBorrowController {
             return R.fail(CodeEnum.PARAM_ERROR);
         }
 
-        return R.success(CodeEnum.SUCCESS, borrowService.getLogList(pageIn));
+        return R.success(CodeEnum.SUCCESS, journalBorrowService.getLogList(pageIn));
     }
 
 }
