@@ -69,7 +69,7 @@
 					<div class="left"><span class="required"></span><p class="subtitle">借阅时间</p></div>
 					<div class="right">
 						<!--不一定是input，可以使用div或span等其他元素-->
-						<input type="text" id="date2" class="ex-date" style="width: 220px;" value="" readonly/>
+						<input type="text" id="date2" class="ex-date" style="width: 220px;" value="" readonly/><span style="color: red; font-size: 12px">注意： 普通读者能最多能借阅30天  vip读者最多能借阅60天</span>
 					</div>
 				</div>
 
@@ -111,8 +111,22 @@
 <script>
 
 	var bookId = 0;
+	var auth = 0;
+	var user = ""
+	var userId = 0;
+
     // 页面一加载赋值表单
     $(document).ready(function(){
+		// 页面一加载, 读取登录用户信息, 进行权限限制
+		$.get("/user/currUser", function (data) {
+			var code = data.code;
+			user = data.data;
+			if (code === 200) {
+				auth = user.identity;
+				userId = user.id;
+			}
+		})
+
         // 地址栏参数
         bookId = getQueryVariable("id");
         if (bookId == null||bookId == "") {
@@ -191,10 +205,28 @@
         endDate : endDate,		// 结束日期
         // 重新选择日期之后返回一个时间对象
         callback : function(rtn) {
-            console.log(rtn.startDate + " - " + rtn.endDate);
-            // 刷新时间
+
+			// 刷新时间
             sTime = rtn.startDate;
             eTime = rtn.endDate;
+
+
+			if (auth === 0 && DateMinus(sTime, eTime) > 30) {   // 普通读者
+				javaex.message({
+					content: "普通读者最多只能借阅30天 当前选择了" + DateMinus(sTime, eTime) + "天 请重新选择日期",
+					type: "error"
+				});
+				return false;
+				// eTime = new Date(sTime).setDate(new Date(sTime).getDate() + 30)
+			} else if (auth === 1 && DateMinus(sTime, eTime) > 60) {
+				javaex.message({
+					content: "Vip读者最多只能借阅30天 当前选择了" + DateMinus(sTime, eTime) + "天 请重新选择日期",
+					type: "error"
+				});
+				return false;
+				// eTime = new Date(sTime).setDate(new Date(sTime).getDate() + 60)
+			}
+
         }
     });
 
@@ -220,62 +252,72 @@
             return false;
 		}
 
-		var userId = 0;
-		// 先获取当前登录用户信息
-        $.get("/user/currUser", function(data){
-			var user = data.data;
-			userId = user.id;
-            // 查找到用户, 进行借阅
-            if (userId >0) {
-                var json = {"userId":userId,"journalId":bookId,"createTime":sTime,"endTime":eTime,"updateTime":""};
-                // 借阅图书
-                $.ajax({
-                    //请求方式
-                    type : "POST",
-                    //请求的媒体类型
-                    contentType: "application/json;charset=UTF-8",
-                    //请求地址
-                    url : "/journal_borrow/add",
-                    //数据，json字符串
-                    data : JSON.stringify(json),
-                    //请求成功
-                    success : function(result) {
-                        console.log(result);
-                        // 获取集合属性
-                        var data = result.data;
-                        var code = result.code;
-                        var msg = result.msg;
+		if (auth === 0 && DateMinus(sTime, eTime) > 30) {   // 普通读者
+			javaex.message({
+				content: "普通读者最多只能借阅30天 当前选择了" + DateMinus(sTime, eTime) + "天 请重新选择日期",
+				type: "error"
+			});
+			return false;
+			// eTime = new Date(sTime).setDate(new Date(sTime).getDate() + 30)
+		} else if (auth === 1 && DateMinus(sTime, eTime) > 60) {
+			javaex.message({
+				content: "Vip读者最多只能借阅30天 当前选择了" + DateMinus(sTime, eTime) + "天 请重新选择日期",
+				type: "error"
+			});
+			return false;
+			// eTime = new Date(sTime).setDate(new Date(sTime).getDate() + 60)
+		}
 
-                        if (code === 200) {
-                            javaex.message({
-                                content : "借阅成功",
-                                type : "success"
-                            });
-                            // 跳转至列表
-                            setTimeout(function(){window.location.href="/journal_borrow/search";},1800)
-                        }else{
-                            javaex.message({
-                                content : msg,
-                                type : "error"
-                            });
-                            setTimeout(function(){},1500)
-						}
+		// 查找到用户, 进行借阅
+		if (userId >0) {
+			var json = {"userId":userId,"journalId":bookId,"createTime":sTime,"endTime":eTime,"updateTime":""};
+			// 借阅图书
+			$.ajax({
+				//请求方式
+				type : "POST",
+				//请求的媒体类型
+				contentType: "application/json;charset=UTF-8",
+				//请求地址
+				url : "/journal_borrow/add",
+				//数据，json字符串
+				data : JSON.stringify(json),
+				//请求成功
+				success : function(result) {
+					console.log(result);
+					// 获取集合属性
+					var data = result.data;
+					var code = result.code;
+					var msg = result.msg;
 
-                    },
-                    //请求失败，包含具体的错误信息
-                    error : function(e){
-                        console.log(e.status);
-                        console.log(e.responseText);
-                    }
-                });
-            }else {
-                // 找不到用户, 不可进行借阅操作
-                javaex.message({
-                    content : "登录信息已失效, 请登录后借阅",
-                    type : "error"
-                });
-            }
-        });
+					if (code === 200) {
+						javaex.message({
+							content : "借阅成功",
+							type : "success"
+						});
+						// 跳转至列表
+						setTimeout(function(){window.location.href="/journal_borrow/search";},1800)
+					}else{
+						javaex.message({
+							content : msg,
+							type : "error"
+						});
+						setTimeout(function(){},1500)
+					}
+
+				},
+				//请求失败，包含具体的错误信息
+				error : function(e){
+					console.log(e.status);
+					console.log(e.responseText);
+				}
+			});
+		}else {
+			// 找不到用户, 不可进行借阅操作
+			javaex.message({
+				content : "登录信息已失效, 请登录后借阅",
+				type : "error"
+			});
+		}
 
     });
 

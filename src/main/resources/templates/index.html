@@ -59,7 +59,7 @@
 								<a href="javascript:page('welcome');"><i class="icon-home2"></i><span class="title_font">首页</span></a>
 							</li>
 
-							<li class="menu-item">
+							<li class="menu-item" id="book">
                                 <a href="javascript:;">图书管理<i class="icon-keyboard_arrow_left"></i></a>
                                 <ul>
 									<li><a id="book-list" href="javascript:page('book/book-list');">图书列表</a></li>
@@ -78,8 +78,8 @@
 							<li class="menu-item" id="borrow">
 								<a href="javascript:;">图书借阅管理<i class="icon-keyboard_arrow_left"></i></a>
 								<ul>
-									<li><a id="book-search" href="javascript:page('borrow/book-search');">搜索图书</a></li>
-                                    <li><a id="book-borrow" href="javascript:page('borrow/borrow');">借阅图书</a></li>
+									<li><a id="book-search" href="javascript:page('borrow/book-search');">借阅图书</a></li>
+<!--                                    <li><a id="book-borrow" href="javascript:page('borrow/borrow');">借阅图书</a></li>-->
                                     <li><a id="book-back" href="javascript:page('borrow/back');">归还图书</a></li>
 								</ul>
                             </li>
@@ -87,8 +87,8 @@
 							<li class="menu-item" id="journal_borrow">
 								<a href="javascript:;">期刊借阅管理<i class="icon-keyboard_arrow_left"></i></a>
 								<ul>
-									<li><a id="journal-search" href="javascript:page('journal_borrow/search');">搜索期刊</a></li>
-									<li><a id="journal-borrow" href="javascript:page('journal_borrow/borrow');">借阅期刊</a></li>
+									<li><a id="journal-search" href="javascript:page('journal_borrow/search');">借阅期刊</a></li>
+<!--									<li><a id="journal-borrow" href="javascript:page('journal_borrow/borrow');">借阅期刊</a></li>-->
 									<li><a id="journal-back" href="javascript:page('journal_borrow/back');">归还期刊</a></li>
 								</ul>
 							</li>
@@ -172,25 +172,41 @@
         $.get("/user/currUser", function(data){
             var code = data.code;
             var user = data.data;
-            if (code == 200) {
+            if (code === 200) {
                 // 设置用户昵称
                 $("#nickname").text(user.nickname);
 				// 根据用户权限, 控制用户可见菜单
                 var auth = user.identity;
-                if (auth === 3){   // 管理员
-					$("#purchase-add").hide();
+
+				if (auth === 0){ // 普通读者
+					$("#add-book").hide()
+					$("#add-journal").hide()
+					$("#reader").hide()
+					$("#log_m").hide()
+					$("#user").hide()
+					$("#purchase").hide()
 				}
 
-            	if (auth === 1){ // 普通读者
-
+            	if (auth === 1){ // vip读者
+					$("#add-book").hide()
+					$("#add-journal").hide()
+					$("#reader").hide()
+					$("#log_m").hide()
+					$("#user").hide()
+					$("#purchase").hide()
 				}
 
-            	if (auth === 2){ // vip读者
+            	// if (auth == 2){ // 管理员
+				//
+				// }
 
-				}
-
-            	if (auth === 3){  // 图书管理员
-
+            	if (auth === 2){  // 图书管理员
+					$("#borrow").hide()
+					$("#journal_borrow").hide()
+					$("#reader").hide()
+					$("#log_m").hide()
+					$("#user").hide()
+					$("#purchase").hide()
 				}
                 // if (auth !== 0) {
                 //     console.log(auth);
@@ -203,14 +219,14 @@
 				// 	$("#purchase-add").hide();
 				// 	$("#purchase-list").hide();
 				// }
-                if (auth === 4){
-                	$("#add-book").hide();
+                if (auth === 4){  // 采购员
+                	$("#book").hide();
 					$("#reader").hide();
 					$("#user").hide();
 					$("#borrow").hide();
 					$("#log_m").hide();
 					$("#journal").hide();
-					$("#journal-borrow").hide();
+					$("#journal_borrow").hide();
 				}
 			}
 

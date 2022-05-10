@@ -148,9 +148,9 @@
 
                 $("#tbody").html(text);
 
-                // if (auth === 4 || auth === 0 || auth === 1) {
-                //     $("tr td:nth-child(12)").hide()
-                // }
+                if (auth === 4 || auth === 0 || auth === 1) {
+                    $("tr td:nth-child(10)").hide()
+                }
 
                 // 向上取整去总页数
                 var totalPage = Math.ceil(total / pageSize);
