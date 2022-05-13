@@ -31,7 +31,7 @@
 	<div class="block">
 		<!--修饰块元素名称-->
 		<div class="banner">
-			<p class="tab fixed">添加超级管理员</p>
+			<p class="tab fixed">添加Vip读者</p>
 		</div>
 	
 		<!--正文内容-->
@@ -79,11 +79,11 @@
 					<div class="right">
 						<select id="select">
 							<option value="">请选择</option>
-							<option value="0">普通读者</option>
+<!--							<option value="0">普通读者</option>-->
 							<option value="1">vip读者</option>
-							<option value="2">图书超级管理员</option>
-							<option value="3">超级管理员</option>
-							<option value="4">采购员</option>
+<!--							<option value="2">图书超级管理员</option>-->
+<!--							<option value="3">超级管理员</option>-->
+<!--							<option value="4">采购员</option>-->
 						</select>
 					</div>
 				</div>
@@ -184,12 +184,11 @@
             //请求的媒体类型
             contentType: "application/json;charset=UTF-8",
             //请求地址
-            url : "/user/addAdmin",
+            url : "/user/addVip",
             //数据，json字符串
             data : JSON.stringify(json),
             //请求成功
             success : function(result) {
-                console.log(result);
                 // 获取集合属性
                 var data = result.data;
                 var code = result.code;

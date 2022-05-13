@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.book.manager.entity.Users;
+import com.book.manager.repos.UsersRepository;
 import com.book.manager.service.UserService;
 import com.book.manager.util.R;
 import com.book.manager.util.consts.Constants;
@@ -15,6 +16,7 @@ import com.book.manager.util.vo.UserOut;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,6 +38,9 @@ public class UsersController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UsersRepository usersRepository;
 
     @ApiOperation("用户列表")
     @PostMapping("/list")
@@ -97,18 +102,19 @@ public class UsersController {
             return R.fail(CodeEnum.PARAM_ERROR);
         }
         // 读者默认是普通用户
-        users.setIsAdmin(1);
+//        users.setIsAdmin(1);
         return R.success(CodeEnum.SUCCESS, userService.addUser(users));
     }
 
-    @ApiOperation("添加超级管理员")
-    @PostMapping("/addAdmin")
-    public R addAdmin(@RequestBody Users users) {
+    @ApiOperation("添加VIP读者")
+    @PostMapping("/addVip")
+    public R addVip(@RequestBody Users users) {
         if (users == null) {
             return R.fail(CodeEnum.PARAM_ERROR);
         }
         // 设置超级管理员权限
-        users.setIsAdmin(0);
+//        users.setIsAdmin(0);
+//        users.setIsAdmin(1);
         return R.success(CodeEnum.SUCCESS, userService.addUser(users));
     }
 
@@ -120,7 +126,7 @@ public class UsersController {
         }
 
         // 设置采购员
-        users.setIsAdmin(4);
+//        users.setIsAdmin(4);
         return R.success(CodeEnum.SUCCESS, userService.addUser(users));
     }
 
@@ -129,6 +135,20 @@ public class UsersController {
     @PostMapping("/update")
     public R modifyUsers(@RequestBody Users users) {
         return R.success(CodeEnum.SUCCESS, userService.updateUser(users));
+    }
+
+
+    @ApiOperation("升级VIP")
+    @PostMapping("/updateVip")
+    public R updateVip(Integer id){
+        Users users = userService.findUserById(id);
+
+        if (users != null){
+            users.setIdentity(1);
+            usersRepository.saveAndFlush(users);
+            return R.success(CodeEnum.SUCCESS);
+        }
+        return R.fail(CodeEnum.NOT_FOUND);
     }
 
 

@@ -79,11 +79,11 @@
 					<div class="right">
 						<select id="select">
 							<option value="">请选择</option>
-							<option value="0">普通读者</option>
+							<option value="0" selected>普通读者</option>
 							<option value="1">vip读者</option>
-							<option value="2">图书超级管理员</option>
-							<option value="3">超级管理员</option>
-							<option value="4">采购员</option>
+<!--							<option value="2">图书超级管理员</option>-->
+<!--							<option value="3">超级管理员</option>-->
+<!--							<option value="4">采购员</option>-->
 						</select>
 					</div>
 				</div>
@@ -175,6 +175,13 @@
             });
             return false;
         }
+
+        if (identity == ""){
+        	javaex.message({
+				content: "身份信息不能为空",
+				type: "error"
+			})
+		}
 
 		var json = {"nickname":nickname,"username":username,"password":password,"birthday":Date.parse(birthday),"tel":tel,"email":email,"address":address,"size":size, 'qkSize': qksize, "identity":identity};
         $.ajax({
