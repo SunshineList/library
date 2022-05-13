@@ -1,14 +1,16 @@
 package com.book.manager.controller;
 
+import com.book.manager.dao.BookMapper;
 import com.book.manager.entity.Book;
 import com.book.manager.service.BookService;
 import com.book.manager.util.R;
 import com.book.manager.util.http.CodeEnum;
 import com.book.manager.util.ro.PageIn;
+import com.book.manager.util.vo.BookTjOut;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -23,6 +25,9 @@ public class BookController {
 
     @Autowired
     private BookService bookService;
+
+    @Autowired
+    private BookMapper bookMapper;
 
     @ApiOperation("图书搜索列表")
     @PostMapping("/list")
@@ -65,4 +70,15 @@ public class BookController {
         return R.success(CodeEnum.SUCCESS);
     }
 
+    @ApiModelProperty("图书类型统计")
+    @GetMapping("/book_statistics")
+    public R bookStatistics(){
+        BookTjOut out = new BookTjOut();
+        out.setSx(bookMapper.bookTypeTj("1"));
+        out.setZx(bookMapper.bookTypeTj("2"));
+        out.setWh(bookMapper.bookTypeTj("3"));
+        out.setZf(bookMapper.bookTypeTj("4"));
+        out.setLd(bookMapper.bookTypeTj("5"));
+        return R.success(CodeEnum.SUCCESS, out);
+    }
 }

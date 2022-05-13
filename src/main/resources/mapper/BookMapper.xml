@@ -64,4 +64,10 @@
         </set>
         where id = #{id}
     </update>
+
+
+    <select id="bookTypeTj" resultType="Integer">
+        select COUNT(*) from book where type = #{_parameter}
+    </select>
+
 </mapper>

@@ -2,39 +2,81 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>第一个 ECharts 实例</title>
+    <title>图书统计</title>
     <!-- 引入 echarts.js -->
+    <meta charset="utf-8">
+    <!--字体图标-->
+    <link href="../../javaex/pc/css/icomoon.css" rel="stylesheet"/>
+    <!--动画-->
+    <link href="../../javaex/pc/css/animate.css" rel="stylesheet"/>
+    <!--骨架样式-->
+    <link href="../../javaex/pc/css/common.css" rel="stylesheet"/>
+    <!--皮肤（缇娜）-->
+    <link href="../../javaex/pc/css/skin/tina.css" rel="stylesheet"/>
+    <!--jquery，不可修改版本-->
+    <script src="../../javaex/pc/lib/jquery-1.7.2.min.js"></script>
+    <!--全局动态修改-->
+    <script src="../../javaex/pc/js/common.js"></script>
+    <!--核心组件-->
+    <script src="../../javaex/pc/js/javaex.min.js"></script>
+    <!--表单验证-->
+    <script src="../../javaex/pc/js/javaex-formVerify.js"></script>
+    <!-- echart-->
     <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
 </head>
 <body>
 <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
-<div id="main" style="width: 600px;height:400px;"></div>
+<div class="list-content">
+    <!--块元素-->
+<!--    <div class="block">-->
+<!--        &lt;!&ndash;页面有多个表格时，可以用于标识表格&ndash;&gt;-->
+<!--        <h2>图书列表</h2>-->
+<!--        &lt;!&ndash;右上角的返回按钮&ndash;&gt;-->
+<!--        <a href="javascript:history.back();">-->
+<!--            <button class="button indigo radius-3" style="position: absolute;right: 20px;top: 16px;"><span-->
+<!--                    class="icon-arrow_back"></span> 返回-->
+<!--            </button>-->
+<!--        </a>-->
+<!--    </div>-->
+
+    <div id="main" style="width: 600px; height: 500px"></div>
+
+</div>
 <script type="text/javascript">
     // 基于准备好的dom，初始化echarts实例
     var myChart = echarts.init(document.getElementById('main'));
 
-    // 指定图表的配置项和数据
-    var option = {
-        title: {
-            text: '统计实例'
-        },
-        tooltip: {},
-        legend: {
-            data:['销量']
-        },
-        xAxis: {
-            data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
-        },
-        yAxis: {},
-        series: [{
-            name: '销量',
-            type: 'bar',
-            data: [5, 20, 36, 10, 10, 20]
-        }]
-    };
+    $(document).ready(() => {
+        $.get("/book/book_statistics", (data) => {
+            var code = data.code;
+            if (code == 200) {
+                var xAxisList = [data.data.sx, data.data.zx, data.data.wh, data.data.zf, data.data.ld]
+                // 指定图表的配置项和数据
+                var option = {
+                    title: {
+                        text: '图书类型统计'
+                    },
+                    tooltip: {},
+                    legend: {
+                        data: ['类型']
+                    },
+                    xAxis: {
+                        data: ["马列主义", "哲学、宗教", "文体", "政治、法律", "历史、地理"]
+                    },
+                    yAxis: {},
+                    series: [{
+                        name: '销量',
+                        type: 'bar',
+                        data: xAxisList
+                    }]
+                };
 
-    // 使用刚指定的配置项和数据显示图表。
-    myChart.setOption(option);
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
+            }
+        })
+    })
+
 </script>
 </body>
 </html>

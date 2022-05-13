@@ -29,4 +29,11 @@ public interface BookMapper {
      * @return
      */
     int updateBook(Map<String, Object> map);
+
+    /**
+     * 图书类型统计
+     */
+
+    int bookTypeTj(String type);
+
 }
