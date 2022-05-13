@@ -64,6 +64,7 @@
                                 <ul>
 									<li><a id="book-list" href="javascript:page('book/book-list');">图书列表</a></li>
 									<li><a id="add-book" href="javascript:page('book/book-add');">图书上架</a></li>
+									<li><a id="book-statistics" href="javascript:page('statistics/demo');">统计</a></li>
 								</ul>
                             </li>
 
@@ -196,10 +197,6 @@
 					$("#purchase").hide()
 				}
 
-            	// if (auth == 2){ // 管理员
-				//
-				// }
-
             	if (auth === 2){  // 图书管理员
 					$("#borrow").hide()
 					$("#journal_borrow").hide()
@@ -208,17 +205,7 @@
 					$("#user").hide()
 					$("#purchase").hide()
 				}
-                // if (auth !== 0) {
-                //     console.log(auth);
-                //     // 若为普通用户权限, 则无法访问修改类菜单 无法添加图书,添加读者,管理用户以及添加超级管理员
-				// 	$("#add-book").hide();
-				// 	$("#reader-add").hide();
-				// 	$("#user-manage").hide();
-				// 	$("#admin-add").hide();
-				// 	$("#log").hide();
-				// 	$("#purchase-add").hide();
-				// 	$("#purchase-list").hide();
-				// }
+
                 if (auth === 4){  // 采购员
                 	$("#book").hide();
 					$("#reader").hide();
