@@ -24,27 +24,25 @@
     <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
 </head>
 <body>
-<div class="list-content" style="display: flex; justify-content: space-between">
+<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+<div class="list-content" style="align-content: center">
 
-    <div id="main" style="width: 600px; height: 500px"></div>
-
-    <div id="main2" style="width: 600px; height: 700px"></div>
+    <div id="main" style="width: 600px; height: 500px; align-items: center"></div>
 
 </div>
 <script type="text/javascript">
     // 基于准备好的dom，初始化echarts实例
     var myChart = echarts.init(document.getElementById('main'));
-    var myChart2 = echarts.init(document.getElementById("main2"))
 
     $(document).ready(() => {
-        $.get("/book/book_statistics", (data) => {
+        $.get("/journal/journal_statistics", (data) => {
             var code = data.code;
             if (code == 200) {
                 var xAxisList = [data.data.sx, data.data.zx, data.data.wh, data.data.zf, data.data.ld]
                 // 指定图表的配置项和数据
                 var option = {
                     title: {
-                        text: '图书类型统计'
+                        text: '期刊类型统计'
                     },
                     tooltip: {},
                     legend: {
@@ -61,43 +59,7 @@
                     }]
                 };
 
-
-                option2 = {
-                    legend: {
-                        top: 'bottom'
-                    },
-                    toolbox: {
-                        show: true,
-                        feature: {
-                        //     mark: { show: true },
-                            dataView: { show: true, readOnly: false },
-                        //     restore: { show: true },
-                            saveAsImage: { show: true }
-                        }
-                    },
-                    series: [
-                        {
-                            name: 'Nightingale Chart',
-                            type: 'pie',
-                            radius: [50, 250],
-                            center: ['50%', '50%'],
-                            // roseType: 'area',
-                            itemStyle: {
-                                borderRadius: 8
-                            },
-                            data: [
-                                { value: data.data.sx, name: '马列主义' },
-                                { value: data.data.zx, name: '哲学、宗教' },
-                                { value: data.data.wh, name: '文体' },
-                                { value: data.data.zf, name: '政治、法律' },
-                                { value: data.data.ld, name: '历史、地理' }
-                            ]
-                        }
-                    ]
-                };
-
                 // 使用刚指定的配置项和数据显示图表。
-                myChart2.setOption(option2);
                 myChart.setOption(option);
             }
         })

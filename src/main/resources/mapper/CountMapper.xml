@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.book.manager.dao.CountMapper">
+
+    <select id="countSex" resultType="Integer">
+        select COUNT(*) from question where t1 = #{_parameter}
+    </select>
+
+    <select id="countAge" resultType="Integer">
+        select COUNT(*) from question where t2 = #{_parameter}
+    </select>
+
+    <select id="countFren" resultType="Integer">
+        select COUNT(*) from question where t3 = #{_parameter}
+    </select>
+
+    <select id="countBookType" resultType="Integer">
+        select COUNT(*) from question where t4 = #{_parameter}
+    </select>
+
+    <select id="countJournalType" resultType="Integer">
+        select COUNT(*) from question where t5 = #{_parameter}
+    </select>
+
+    <select id="countBug" resultType="Integer">
+        select COUNT(*) from question where t6 = #{_parameter}
+    </select>
+
+    <select id="countAdd" resultType="Integer">
+        select COUNT(*) from question where t7 = #{_parameter}
+    </select>
+
+    <select id="countBorrowTime" resultType="Integer">
+        select COUNT(*) from question where t8 = #{_parameter}
+    </select>
+
+    <select id="countPj" resultType="Integer">
+        select COUNT(*) from question where t9 = #{_parameter}
+    </select>
+
+</mapper>

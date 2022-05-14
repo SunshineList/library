@@ -28,4 +28,10 @@ public interface JournalMapper {
      * @return
      */
     int updateJournal(Map<String, Object> map);
+
+    /**
+     * 期刊类型统计
+     */
+
+    int JournalTypeTj(String type);
 }

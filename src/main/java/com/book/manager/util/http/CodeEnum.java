@@ -29,7 +29,9 @@ public enum CodeEnum {
     /** 找不到用户 */
     USER_NOT_FOUND(446,"找不到用户!"),
     /** 服务器发生异常 */
-    FAIL(500,"服务器发生异常!");
+    FAIL(500,"服务器发生异常!"),
+    /** 已做*/
+    HAS_DONE(111, "问卷已做");
 
     CodeEnum(int code, String data) {
         this.code = code;

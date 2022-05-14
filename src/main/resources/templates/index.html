@@ -1,8 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta charset="utf-8">
-<!-- 标题栏LOGO -->
+	<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/><!-- 标题栏LOGO -->
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
 <!--字体图标-->
 <link href="../javaex/pc/css/icomoon.css" rel="stylesheet" />
@@ -64,7 +63,6 @@
                                 <ul>
 									<li><a id="book-list" href="javascript:page('book/book-list');">图书列表</a></li>
 									<li><a id="add-book" href="javascript:page('book/book-add');">图书上架</a></li>
-									<li><a id="book-statistics" href="javascript:page('statistics/demo');">统计</a></li>
 								</ul>
                             </li>
 
@@ -73,6 +71,7 @@
 								<ul>
 									<li><a id="journal-list" href="javascript:page('journal/journal-list');">期刊列表</a></li>
 									<li><a id="add-journal" href="javascript:page('journal/journal-add');">期刊上架</a></li>
+<!--									<li><a id="journal-statistics" href="javascript:page('statistics/journal');">期刊统计</a></li>-->
 								</ul>
 							</li>
                             
@@ -128,6 +127,18 @@
 								</ul>
 							</li>
 
+							<li class="menu-item" id="statistics">
+								<a href="javascript:;">统计管理<i class="icon-keyboard_arrow_left"></i></a>
+								<ul>
+									<li><a id="book-statistics" href="javascript:page('statistics/demo');">图书统计</a></li>
+									<li><a id="question-statistics" href="javascript:page('statistics/question');">问卷统计</a></li>
+								</ul>
+							</li>
+
+							<li class="menu-item" id="question">
+								<a id="ques" href="javascript:page('question/index');">调查问卷</i></a>
+							</li>
+
 						</ul>
 					</div>
 				</div>
@@ -173,6 +184,13 @@
         $.get("/user/currUser", function(data){
             var code = data.code;
             var user = data.data;
+
+            $.get("question/is_over", {"user_id": user.id}, (data)=>{
+            	if (data.code == 111){
+            		$("#question").hide()
+				}
+			})
+
             if (code === 200) {
                 // 设置用户昵称
                 $("#nickname").text(user.nickname);
@@ -186,6 +204,7 @@
 					$("#log_m").hide()
 					$("#user").hide()
 					$("#purchase").hide()
+					$("#statistics").hide()
 				}
 
             	if (auth === 1){ // vip读者
@@ -195,6 +214,7 @@
 					$("#log_m").hide()
 					$("#user").hide()
 					$("#purchase").hide()
+					$("#statistics").hide()
 				}
 
             	if (auth === 2){  // 图书管理员
@@ -204,16 +224,24 @@
 					$("#log_m").hide()
 					$("#user").hide()
 					$("#purchase").hide()
+					$("#question").hide()
+					$("#question-statistics").hide()
 				}
 
                 if (auth === 4){  // 采购员
-                	$("#book").hide();
+					$("#add-book").hide()
+					$("#add-journal").hide()
 					$("#reader").hide();
 					$("#user").hide();
 					$("#borrow").hide();
 					$("#log_m").hide();
-					$("#journal").hide();
 					$("#journal_borrow").hide();
+					$("#question").hide()
+					$("#statistics").hide()
+				}
+
+                if (auth === 3){
+                	$("#question").hide()
 				}
 			}
 

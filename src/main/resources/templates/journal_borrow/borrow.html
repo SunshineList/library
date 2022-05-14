@@ -1,8 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<meta charset="utf-8">
-	<!--字体图标-->
+	<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>	<!--字体图标-->
 	<link href="../../javaex/pc/css/icomoon.css" rel="stylesheet" />
 	<!--动画-->
 	<link href="../../javaex/pc/css/animate.css" rel="stylesheet" />
@@ -185,6 +184,13 @@
         return false;
     }
 
+	function DateMinus(date1, date2) {//date1:小日期   date2:大日期
+		var sdate = new Date(date1);
+		var now = new Date(date2);
+		var days = now.getTime() - sdate.getTime();
+		var day = parseInt(days / (1000 * 60 * 60 * 24));
+		return day;
+	}
 
     // 当天时间
     var currentDate = new Date();

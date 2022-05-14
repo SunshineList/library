@@ -52,4 +52,9 @@
         </set>
         where id = #{id}
     </update>
+
+    <select id="JournalTypeTj" resultType="Integer">
+        select COUNT(*) from journal where type = #{_parameter}
+    </select>
+
 </mapper>

@@ -1,0 +1,523 @@
+﻿<!doctype html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/><!--字体图标-->
+    <link href="../../javaex/pc/css/icomoon.css" rel="stylesheet"/>
+    <!--动画-->
+    <link href="../../javaex/pc/css/animate.css" rel="stylesheet"/>
+    <!--骨架样式-->
+    <link href="../../javaex/pc/css/common.css" rel="stylesheet"/>
+    <!--皮肤（缇娜）-->
+    <link href="../../javaex/pc/css/skin/tina.css" rel="stylesheet"/>
+    <!--jquery，不可修改版本-->
+    <script src="../../javaex/pc/lib/jquery-1.7.2.min.js"></script>
+    <!--全局动态修改-->
+    <script src="../../javaex/pc/js/common.js"></script>
+    <!--核心组件-->
+    <script src="../../javaex/pc/js/javaex.min.js"></script>
+    <!--表单验证-->
+    <script src="../../javaex/pc/js/javaex-formVerify.js"></script>
+    <title>后台管理</title>
+
+    <style>
+        /* Containers */
+        html, body {
+            min-height: 100%;
+        }
+
+        body {
+            font-family: sans-serif;
+            background: #42426b;
+            /*background-image: -webkit-linear-gradient(135deg, #8067B7, #EC87C0);*/
+            /*background-image: linear-gradient(-45deg, #8067B7, #EC87C0);*/
+            color: rgba(255, 255, 255, .5);
+        }
+
+        .rb-box {
+            width: 80%;
+            /*max-width: 420px;*/
+            margin: 50px auto;
+            padding: 1.3em;
+            background: #292942;
+            border-radius: .75em;
+            -webkit-filter: drop-shadow(1px 2px 5px rgba(0, 0, 0, .3));
+            filter: drop-shadow(1px 2px 5px rgba(0, 0, 0, .3));
+            box-shadow: 0 2px 2px rgba(243, 49, 128, .5),
+            0 0px 5px rgba(243, 49, 128, .15),
+            0 0px 4px rgba(0, 0, 0, .35),
+            0 5px 20px rgba(243, 49, 128, .25),
+            0 15px 50px rgba(243, 49, 128, .75),
+            inset 0 0 15px rgba(255, 255, 255, .05);
+        }
+
+        /* Custom Radio Button */
+        p {
+            font-size: 1.2em;
+            margin-bottom: 0.5em;
+            margin-top: 0.5em;
+        }
+
+        .rb {
+            padding: 16px 0;
+            text-align: center;
+            background: rgba(255, 255, 255, .03);
+            border-radius: .3em;
+        }
+
+        .rb-tab {
+            display: inline-block;
+            position: relative;
+            width: 15%;
+        }
+
+        .rb-txt {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.0em;
+            color: #FFFFFF;
+        }
+
+        .rb-spot {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, .3);
+            border-radius: 100%;
+            cursor: pointer;
+            transition: ease .5s;
+        }
+
+        .rb-tab-active .rb-spot {
+            background: rgba(0, 0, 0, .35);
+            border: 2px solid rgba(243, 49, 128, .6);
+        }
+
+        /* Submit Button */
+        .button-box {
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        button {
+            display: inline-block;
+            width: 80%;
+            margin-top: 1.2em;
+            padding: 1em;
+            max-width: 220px;
+            font-size: .9em;
+            color: #D42D78;
+            text-transform: uppercase;
+            text-decoration: none;
+            letter-spacing: .15em;
+            background: white;
+            border: none;
+            outline: none;
+            border-radius: 5em;
+            box-shadow: 0 15px 20px -10px rgba(0, 0, 0, 0.3);
+            transition: color 0.6s,
+            box-shadow 0.3s,
+            transform 0.3s;
+            cursor: pointer;
+        }
+
+        button:hover {
+            box-shadow: 0 3px 5px -5px rgba(0, 0, 0, 0.3);
+            color: #6f6f6f;
+        }
+
+        .font_title {
+            font-size: 1.2em;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<div class="rb-box">
+    <!-- Radio Button Module -->
+    <p>1.您的性别是</p>
+    <div id="rb-1" class="rb">
+        <div class="rb-tab" data-value="1">
+            <!--            <div class="rb-spot">-->
+            <input type="radio" value="1" name="sex"> <span class="font_title">男</span> </input>
+            <!--                <span class="rb-txt">男</span>-->
+            <!--            </div>-->
+        </div>
+        <div class="rb-tab" data-value="2">
+            <!--            <div class="rb-spot">-->
+            <input type="radio" value="2" name="sex"> <span class="font_title">女</span> </input>
+            <!--                <span class="rb-txt">女</span>-->
+            <!--            </div>-->
+        </div>
+    </div>
+
+    <!-- Radio Button Module -->
+    <p>2.您的年龄是</p>
+    <div id="rb-2" class="rb">
+        <div class="rb-tab" data-value="1">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">18以下</span>-->
+            <!--            </div>-->
+            <input type="radio" value="1" name="age"> <span class="font_title">18以下</span> </input>
+        </div>
+        <div class="rb-tab" data-value="2">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">18-40</span>-->
+            <!--            </div>-->
+            <input type="radio" value="2" name="age"> <span class="font_title">18-40</span> </input>
+        </div>
+        <div class="rb-tab" data-value="3">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">40-60</span>-->
+            <!--            </div>-->
+            <input type="radio" value="3" name="age"> <span class="font_title">40-60</span> </input>
+        </div>
+        <div class="rb-tab" data-value="4">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">60以上</span>-->
+            <!--            </div>-->
+            <input type="radio" value="4" name="age"> <span class="font_title">60以上</span> </input>
+        </div>
+    </div>
+
+    <!-- Radio Button Module -->
+    <p>3. 您借阅本图书馆书籍的频率?</p>
+    <div id="rb-3" class="rb">
+        <div class="rb-tab" data-value="1">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">总是</span>-->
+            <!--            </div>-->
+            <input type="radio" value="1" name="book_fre"> <span class="font_title">总是</span> </input>
+        </div>
+        <div class="rb-tab" data-value="2">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">经常</span>-->
+            <!--            </div>-->
+            <input type="radio" value="2" name="book_fre"> <span class="font_title">经常</span> </input>
+        </div>
+        <div class="rb-tab" data-value="3">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">偶尔</span>-->
+            <!--            </div>-->
+            <input type="radio" value="3" name="book_fre"> <span class="font_title">偶尔</span> </input>
+        </div>
+        <div class="rb-tab" data-value="4">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">从不</span>-->
+            <!--            </div>-->
+            <input type="radio" value="4" name="book_fre"> <span class="font_title">从不</span> </input>
+        </div>
+    </div>
+
+    <!-- Radio Button Module -->
+    <p>4. 您最喜欢的图书类型是?</p>
+    <div id="rb-4" class="rb">
+        <div class="rb-tab" data-value="1">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">马列主义思想</span>-->
+            <!--            </div>-->
+            <input type="radio" value="1" name="book_type"> <span class="font_title">马列主义思想</span> </input>
+        </div>
+        <div class="rb-tab" data-value="2">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">哲学</span>-->
+            <!--            </div>-->
+            <input type="radio" value="2" name="book_type"> <span class="font_title">哲学</span> </input>
+        </div>
+        <div class="rb-tab" data-value="3">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">科学类</span>-->
+            <!--            </div>-->
+            <input type="radio" value="3" name="book_type"> <span class="font_title">科学类</span> </input>
+        </div>
+        <div class="rb-tab" data-value="4">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">综合性图书</span>-->
+            <!--            </div>-->
+            <input type="radio" value="4" name="book_type"> <span class="font_title">综合性图书</span> </input>
+        </div>
+        <div class="rb-tab" data-value="5">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">其他</span>-->
+            <!--            </div>-->
+            <input type="radio" value="5" name="book_type"> <span class="font_title">其他</span> </input>
+        </div>
+    </div>
+
+    <!-- Radio Button Module -->
+    <p>5. 您最喜欢的期刊类型是?</p>
+    <div id="rb-5" class="rb">
+        <div class="rb-tab" data-value="1">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">马列主义、毛泽东思想</span>-->
+            <!--            </div>-->
+            <input type="radio" value="1" name="journal_type"> <span class="font_title">马列主义、毛泽东思想</span> </input>
+        </div>
+        <div class="rb-tab" data-value="2">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">哲学</span>-->
+            <!--            </div>-->
+            <input type="radio" value="2" name="journal_type"> <span class="font_title">哲学</span> </input>
+        </div>
+        <div class="rb-tab" data-value="3">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">社会科学</span>-->
+            <!--            </div>-->
+            <input type="radio" value="3" name="journal_type"> <span class="font_title">社会科学</span> </input>
+        </div>
+        <div class="rb-tab" data-value="4">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">自然科学</span>-->
+            <!--            </div>-->
+            <input type="radio" value="4" name="journal_type"> <span class="font_title">自然科学</span> </input>
+        </div>
+        <div class="rb-tab" data-value="5">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">综合性刊物</span>-->
+            <!--            </div>-->
+            <input type="radio" value="5" name="journal_type"> <span class="font_title">综合性刊物</span> </input>
+        </div>
+    </div>
+
+    <!-- Radio Button Module -->
+    <p>6.您认为本公共图书馆藏书有哪些缺陷？</p>
+    <div id="rb-6" class="rb">
+        <div class="rb-tab" data-value="1">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">数量少</span>-->
+            <!--            </div>-->
+            <input type="radio" value="1" name="bug"> <span class="font_title">数量少</span> </input>
+        </div>
+        <div class="rb-tab" data-value="2">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">种类不足</span>-->
+            <!--            </div>-->
+            <input type="radio" value="2" name="bug"> <span class="font_title">种类不足</span> </input>
+        </div>
+        <div class="rb-tab" data-value="3">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">其他</span>-->
+            <!--            </div>-->
+            <input type="radio" value="3" name="bug"> <span class="font_title">其他</span> </input>
+        </div>
+    </div>
+
+    <!-- Radio Button Module -->
+    <p>7.如果图书馆需要采购新的图书，您最建议添加哪一类图书？</p>
+    <div id="rb-7" class="rb">
+        <div class="rb-tab" data-value="1">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">马列主义、毛泽东思想</span>-->
+            <!--            </div>-->
+            <input type="radio" value="1" name="add"> <span class="font_title">马列主义、毛泽东思想</span> </input>
+        </div>
+        <div class="rb-tab" data-value="2">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">哲学</span>-->
+            <!--            </div>-->
+            <input type="radio" value="2" name="add"> <span class="font_title">哲学</span> </input>
+        </div>
+        <div class="rb-tab" data-value="3">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">科学类</span>-->
+            <!--            </div>-->
+            <input type="radio" value="3" name="add"> <span class="font_title">科学类</span> </input>
+        </div>
+        <div class="rb-tab" data-value="4">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">综合性图书</span>-->
+            <!--            </div>-->
+            <input type="radio" value="4" name="add"> <span class="font_title">综合性图书</span> </input>
+        </div>
+    </div>
+
+    <!-- Radio Button Module -->
+    <p>8.您希望的图书馆的借书期限是多久</p>
+    <div id="rb-8" class="rb">
+        <div class="rb-tab" data-value="1">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">一个月</span>-->
+            <!--            </div>-->
+            <input type="radio" value="1" name="time"> <span class="font_title">一个月</span> </input>
+        </div>
+        <div class="rb-tab" data-value="2">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">两个月</span>-->
+            <!--            </div>-->
+            <input type="radio" value="2" name="time"> <span class="font_title">两个月</span> </input>
+        </div>
+        <div class="rb-tab" data-value="3">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">三个月</span>-->
+            <!--            </div>-->
+            <input type="radio" value="3" name="time"> <span class="font_title">三个月</span> </input>
+        </div>
+        <div class="rb-tab" data-value="4">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">更长</span>-->
+            <!--            </div>-->
+            <input type="radio" value="4" name="time"> <span class="font_title">更长</span> </input>
+        </div>
+    </div>
+
+    <!-- Radio Button Module -->
+    <p>9.您对图书馆的期刊（包括文摘、全文）数据库的评价为</p>
+    <div id="rb-9" class="rb">
+        <div class="rb-tab" data-value="1">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">满意</span>-->
+            <!--            </div>-->
+            <input type="radio" value="1" name="pj"> <span class="font_title">满意</span> </input>
+        </div>
+        <div class="rb-tab" data-value="2">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">基本满意</span>-->
+            <!--            </div>-->
+            <input type="radio" value="2" name="pj"> <span class="font_title">基本满意</span> </input>
+        </div>
+        <div class="rb-tab" data-value="3">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">不太满意</span>-->
+            <!--            </div>-->
+            <input type="radio" value="3" name="pj"> <span class="font_title">不太满意</span> </input>
+        </div>
+        <div class="rb-tab" data-value="4">
+            <!--            <div class="rb-spot">-->
+            <!--                <span class="rb-txt">不满意</span>-->
+            <!--            </div>-->
+            <input type="radio" value="4" name="pj"> <span class="font_title">不满意</span> </input>
+        </div>
+
+    </div>
+
+
+    <p>10.您对本公共图书馆有什么意见和建议？</p>
+    <div id="rb-10" class="rb" style="text-align: left">
+        <div class="rb-tab">
+            <textarea id="advice" placeholder="" style="width: 500px; height: 200px"></textarea>
+        </div>
+    </div>
+
+    <!-- Button -->
+    <div class="button-box">
+        <button class="button trigger">提交</button>
+    </div>
+
+    <!-- 10.您对本公共图书馆有什么意见和建议？-->
+
+</div>
+
+<script>
+
+    var user_id = ""
+
+    $(document).ready(function(){
+        $.get("/user/currUser", function(data) {
+            var code = data.code;
+            var user = data.data;
+            if (code == 200){
+                user_id = user.id;
+            }
+        })
+    })
+    var survey = []; //Bidimensional array: [ [1,3], [2,4] ]
+
+    //switcher function:
+    $(".rb-tab").click(function () {
+        //Spot switcher:
+        $(this).parent().find(".rb-tab").removeClass("rb-tab-active");
+        $(this).addClass("rb-tab-active");
+    });
+
+    //Save data:
+    $(".trigger").click(function () {
+        //Empty array:
+        survey = [];
+        //Push data:
+        for (i = 1; i <= $(".rb").length; i++) {
+            var rb = "rb" + i;
+            var rbValue = parseInt($("#rb-" + i).find(".rb-tab-active").attr("data-value"));
+            //Bidimensional array push:
+            var key = "t" + i.toString();
+            if (i === 10) {
+                var rbValue = $("#advice").val()
+                survey.push({key, rbValue});
+            } else {
+                survey.push({key, rbValue});
+            } //Bidimensional array: [ [1,3], [2,4] ]
+        }
+
+        var data = {
+            "userId": user_id,
+            "t1" : parseInt($("#rb-" + "1").find(".rb-tab-active").attr("data-value")),
+            "t2" : parseInt($("#rb-" + "2").find(".rb-tab-active").attr("data-value")),
+            "t3" : parseInt($("#rb-" + "3").find(".rb-tab-active").attr("data-value")),
+            "t4" : parseInt($("#rb-" + "4").find(".rb-tab-active").attr("data-value")),
+            "t5" : parseInt($("#rb-" + "5").find(".rb-tab-active").attr("data-value")),
+            "t6" : parseInt($("#rb-" + "6").find(".rb-tab-active").attr("data-value")),
+            "t7" : parseInt($("#rb-" + "7").find(".rb-tab-active").attr("data-value")),
+            "t8" : parseInt($("#rb-" + "8").find(".rb-tab-active").attr("data-value")),
+            "t9" : parseInt($("#rb-" + "9").find(".rb-tab-active").attr("data-value")),
+            "t10": $("#advice").val()
+        }
+
+        //Debug:
+        $.ajax({
+            //请求方式
+            type: "POST",
+            //请求的媒体类型
+            contentType: "application/json;charset=UTF-8",
+            //请求地址
+            url: "/question/add",
+            //数据，json字符串
+            data: JSON.stringify(data),
+            //请求成功
+            success: function (result) {
+                console.log(result);
+                // 获取集合属性
+                var data = result.data;
+                var code = result.code;
+
+                if (code == 200) {
+                    javaex.message({
+                        content: "提交成功",
+                        type: "success"
+                    });
+                    // 跳转至列表
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1500)
+                }
+
+            },
+            //请求失败，包含具体的错误信息
+            error: function (e) {
+                console.log(e.status);
+                console.log(e.responseText);
+            }
+        });
+
+    });
+
+    //Debug:
+    // function debug() {
+    //     var debug = {};
+    //     for (i = 0; i < survey.length; i++) {
+    //       // console.log(survey[i])
+    //       //   var key = "t" + (i + 1).toString()
+    //       //   debug += "No " + key + " = " + survey[i]["rbValue"] + "\n";
+    //     }
+    //     alert(debug);
+    // };
+</script>
+
+</body>
+</html>
+

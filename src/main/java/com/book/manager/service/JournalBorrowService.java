@@ -61,9 +61,9 @@ public class JournalBorrowService {
          * 一本只能借一次
          */
 
-        if (isBorrow >= 1){
-            return Constants.JOURNAL_ERROR;
-        }
+//        if (isBorrow >= 1){
+//            return Constants.JOURNAL_ERROR;
+//        }
 
         if (bor!=null) {
             Integer ret = bor.getRet();

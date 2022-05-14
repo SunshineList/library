@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <title>图书统计</title>
+    <!-- 引入 echarts.js -->
+    <meta charset="utf-8">
+    <!--字体图标-->
+    <link href="../../javaex/pc/css/icomoon.css" rel="stylesheet"/>
+    <!--动画-->
+    <link href="../../javaex/pc/css/animate.css" rel="stylesheet"/>
+    <!--骨架样式-->
+    <link href="../../javaex/pc/css/common.css" rel="stylesheet"/>
+    <!--皮肤（缇娜）-->
+    <link href="../../javaex/pc/css/skin/tina.css" rel="stylesheet"/>
+    <!--jquery，不可修改版本-->
+    <script src="../../javaex/pc/lib/jquery-1.7.2.min.js"></script>
+    <!--全局动态修改-->
+    <script src="../../javaex/pc/js/common.js"></script>
+    <!--核心组件-->
+    <script src="../../javaex/pc/js/javaex.min.js"></script>
+    <!--表单验证-->
+    <script src="../../javaex/pc/js/javaex-formVerify.js"></script>
+    <!-- echart-->
+    <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
+</head>
+<body>
+
+<div style="display: flex; justify-content: space-between; margin-top: 20px">
+    <div id="main1" style="width: 600px; height: 600px;"></div>
+    <div id="main2" style="width: 600px; height: 600px;"></div>
+    <div id="main3" style="width: 600px; height: 600px;"></div>
+</div>
+
+<div style="display: flex; justify-content: space-between; margin-top: 40px">
+    <div id="main4" style="width: 600px; height: 600px;"></div>
+    <div id="main5" style="width: 600px; height: 600px;"></div>
+    <div id="main6" style="width: 600px; height: 600px;"></div>
+</div>
+
+<div style="display: flex; justify-content: space-between; margin-top: 40px">
+    <div id="main7" style="width: 600px; height: 600px;"></div>
+    <div id="main8" style="width: 600px; height: 600px;"></div>
+    <div id="main9" style="width: 600px; height: 600px;"></div>
+</div>
+
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart1 = echarts.init(document.getElementById('main1'));
+    var myChart2 = echarts.init(document.getElementById('main2'));
+    var myChart3 = echarts.init(document.getElementById('main3'));
+    var myChart4 = echarts.init(document.getElementById('main4'));
+    var myChart5 = echarts.init(document.getElementById('main5'));
+    var myChart6 = echarts.init(document.getElementById('main6'));
+    var myChart7 = echarts.init(document.getElementById('main7'));
+    var myChart8 = echarts.init(document.getElementById('main8'));
+    var myChart9 = echarts.init(document.getElementById('main9'));
+
+
+    $(document).ready(() => {
+        $.get("/question/sex", (data) => {
+            var code = data.code;
+            if (code == 200) {
+                option = {
+                    title: {
+                        text: '性别统计'
+                    },
+                    legend: {
+                        top: 'bottom'
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            dataView: {show: true, readOnly: false},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    series: [
+                        {
+                            name: 'Nightingale Chart',
+                            type: 'pie',
+                            radius: "45%",
+                            center: ['35%', '50%'],
+                            itemStyle: {
+                                borderRadius: 8
+                            },
+                            data: [
+                                {value: data.data.male, name: '男'},
+                                {value: data.data.female, name: '女'},
+                            ]
+                        }
+                    ]
+                };
+                // 使用刚指定的配置项和数据显示图表。
+                myChart1.setOption(option);
+            }
+        })
+
+        $.get("/question/age", (data) => {
+            var code = data.code;
+            if (code == 200) {
+                option = {
+                    title: {
+                        text: '年龄统计'
+                    },
+                    legend: {
+                        top: 'bottom'
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            dataView: {show: true, readOnly: false},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    series: [
+                        {
+                            name: 'Nightingale Chart',
+                            type: 'pie',
+                            radius: "45%",
+                            center: ['50%', '50%'],
+                            itemStyle: {
+                                borderRadius: 8
+                            },
+                            data: [
+                                {value: data.data.answer_1, name: '18以下'},
+                                {value: data.data.answer_2, name: '18-40'},
+                                {value: data.data.answer_3, name: '40-60'},
+                                {value: data.data.answer_4, name: '60以上'},
+                            ]
+                        }
+                    ]
+                };
+                // 使用刚指定的配置项和数据显示图表。
+                myChart2.setOption(option);
+            }
+        })
+
+        $.get("/question/fren", (data) => {
+            var code = data.code;
+            if (code == 200) {
+                option = {
+                    title: {
+                        text: '结束频率统计'
+                    },
+                    legend: {
+                        top: 'bottom'
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            dataView: {show: true, readOnly: false},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    series: [
+                        {
+                            name: 'Nightingale Chart',
+                            type: 'pie',
+                            radius: "45%",
+                            center: ['50%', '50%'],
+                            itemStyle: {
+                                borderRadius: 8
+                            },
+                            data: [
+                                {value: data.data.answer_1, name: '总是'},
+                                {value: data.data.answer_2, name: '经常'},
+                                {value: data.data.answer_3, name: '偶尔'},
+                                {value: data.data.answer_4, name: '从不'},
+                            ]
+                        }
+                    ]
+                };
+                // 使用刚指定的配置项和数据显示图表。
+                myChart3.setOption(option);
+            }
+        })
+
+        $.get("/question/book_type", (data) => {
+            var code = data.code;
+            if (code == 200) {
+                option = {
+                    title: {
+                        text: '图书类型统计'
+                    },
+                    legend: {
+                        top: 'bottom'
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            dataView: {show: true, readOnly: false},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    series: [
+                        {
+                            name: 'Nightingale Chart',
+                            type: 'pie',
+                            radius: "45%",
+                            center: ['50%', '50%'],
+                            itemStyle: {
+                                borderRadius: 8
+                            },
+                            data: [
+                                {value: data.data.answer_1, name: '马列主义思想'},
+                                {value: data.data.answer_2, name: '哲学'},
+                                {value: data.data.answer_3, name: '科学类'},
+                                {value: data.data.answer_4, name: '综合性图书'},
+                                {value: data.data.answer_5, name: '其他'},
+                            ]
+                        }
+                    ]
+                };
+                // 使用刚指定的配置项和数据显示图表。
+                myChart4.setOption(option);
+            }
+        })
+
+        $.get("/question/journal_type", (data) => {
+            var code = data.code;
+            if (code == 200) {
+                option = {
+                    title: {
+                        text: '期刊类型统计'
+                    },
+                    legend: {
+                        top: 'bottom'
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            dataView: {show: true, readOnly: false},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    series: [
+                        {
+                            name: 'Nightingale Chart',
+                            type: 'pie',
+                            radius: "45%",
+                            center: ['50%', '50%'],
+                            itemStyle: {
+                                borderRadius: 8
+                            },
+                            data: [
+                                {value: data.data.answer_1, name: '马列主义、毛泽东思想'},
+                                {value: data.data.answer_2, name: '哲学'},
+                                {value: data.data.answer_3, name: '社会科学'},
+                                {value: data.data.answer_4, name: '自然科学'},
+                                {value: data.data.answer_5, name: '综合性刊物'},
+                            ]
+                        }
+                    ]
+                };
+                // 使用刚指定的配置项和数据显示图表。
+                myChart5.setOption(option);
+            }
+        })
+
+        $.get("/question/bug", (data) => {
+            var code = data.code;
+            if (code == 200) {
+                option = {
+                    title: {
+                        text: '缺陷统计'
+                    },
+                    legend: {
+                        top: 'bottom'
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            dataView: {show: true, readOnly: false},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    series: [
+                        {
+                            name: 'Nightingale Chart',
+                            type: 'pie',
+                            radius: "45%",
+                            center: ['50%', '50%'],
+                            itemStyle: {
+                                borderRadius: 8
+                            },
+                            data: [
+                                {value: data.data.answer_1, name: '数量少'},
+                                {value: data.data.answer_2, name: '种类不足'},
+                                {value: data.data.answer_3, name: '其他'},
+                            ]
+                        }
+                    ]
+                };
+                // 使用刚指定的配置项和数据显示图表。
+                myChart6.setOption(option);
+            }
+        })
+
+        $.get("/question/count_add", (data) => {
+            var code = data.code;
+            if (code == 200) {
+                option = {
+                    title: {
+                        text: '增加类型统计'
+                    },
+                    legend: {
+                        top: 'bottom'
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            dataView: {show: true, readOnly: false},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    series: [
+                        {
+                            name: 'Nightingale Chart',
+                            type: 'pie',
+                            radius: "45%",
+                            center: ['50%', '50%'],
+                            itemStyle: {
+                                borderRadius: 8
+                            },
+                            data: [
+                                {value: data.data.answer_1, name: '马列主义、毛泽东思想'},
+                                {value: data.data.answer_2, name: '哲学'},
+                                {value: data.data.answer_3, name: '科学类'},
+                                {value: data.data.answer_4, name: '综合性图书'},
+                            ]
+                        }
+                    ]
+                };
+                // 使用刚指定的配置项和数据显示图表。
+                myChart7.setOption(option);
+            }
+        })
+
+        $.get("/question/borrow_time", (data) => {
+            var code = data.code;
+            if (code == 200) {
+                option = {
+                    title: {
+                        text: '借阅时间统计'
+                    },
+                    legend: {
+                        top: 'bottom'
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            dataView: {show: true, readOnly: false},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    series: [
+                        {
+                            name: 'Nightingale Chart',
+                            type: 'pie',
+                            radius: "45%",
+                            center: ['50%', '50%'],
+                            itemStyle: {
+                                borderRadius: 8
+                            },
+                            data: [
+                                {value: data.data.answer_1, name: '一个月'},
+                                {value: data.data.answer_2, name: '两个月'},
+                                {value: data.data.answer_3, name: '三个月'},
+                                {value: data.data.answer_4, name: '更长'},
+                            ]
+                        }
+                    ]
+                };
+                // 使用刚指定的配置项和数据显示图表。
+                myChart8.setOption(option);
+            }
+        })
+
+        $.get("/question/pj", (data) => {
+            var code = data.code;
+            if (code == 200) {
+                option = {
+                    title: {
+                        text: '评价统计'
+                    },
+                    legend: {
+                        top: 'bottom'
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            dataView: {show: true, readOnly: false},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    series: [
+                        {
+                            name: 'Nightingale Chart',
+                            type: 'pie',
+                            radius: "45%",
+                            center: ['50%', '50%'],
+                            itemStyle: {
+                                borderRadius: 8
+                            },
+                            data: [
+                                {value: data.data.answer_1, name: '满意'},
+                                {value: data.data.answer_2, name: '基本满意'},
+                                {value: data.data.answer_3, name: '不太满意'},
+                                {value: data.data.answer_4, name: '不满意'},
+                            ]
+                        }
+                    ]
+                };
+                // 使用刚指定的配置项和数据显示图表。
+                myChart9.setOption(option);
+            }
+        })
+
+    })
+
+</script>
+</body>
+</html>

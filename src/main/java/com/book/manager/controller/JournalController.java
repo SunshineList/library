@@ -1,11 +1,15 @@
 package com.book.manager.controller;
 
+import com.book.manager.dao.JournalBorrowMapper;
+import com.book.manager.dao.JournalMapper;
 import com.book.manager.entity.Journal;
 import com.book.manager.service.JournalService;
 import com.book.manager.util.R;
 import com.book.manager.util.http.CodeEnum;
 import com.book.manager.util.ro.PageIn;
+import com.book.manager.util.vo.BookTjOut;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +26,9 @@ public class JournalController {
 
     @Autowired
     private JournalService journalService;
+
+    @Autowired
+    private JournalMapper journalMapper;
 
     @ApiOperation("期刊搜索列表")
     @PostMapping("/list")
@@ -62,6 +69,18 @@ public class JournalController {
     public R delJournal(Integer id) {
         journalService.deleteJournal(id);
         return R.success(CodeEnum.SUCCESS);
+    }
+
+    @ApiModelProperty("期刊类型统计")
+    @GetMapping("/journal_statistics")
+    public R bookStatistics(){
+        BookTjOut out = new BookTjOut();
+        out.setSx(journalMapper.JournalTypeTj("1"));
+        out.setZx(journalMapper.JournalTypeTj("2"));
+        out.setWh(journalMapper.JournalTypeTj("3"));
+        out.setZf(journalMapper.JournalTypeTj("4"));
+        out.setLd(journalMapper.JournalTypeTj("5"));
+        return R.success(CodeEnum.SUCCESS, out);
     }
 
 }
