@@ -29,4 +29,6 @@ public interface BorrowMapper {
     int updateBor(Map<String,Object> map);
 
     List<Borrow> findLogList(String keyword);
+
+    Borrow findBorrowData(int userId, int bookId);
 }

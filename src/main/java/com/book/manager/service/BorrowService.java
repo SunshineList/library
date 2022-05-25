@@ -1,5 +1,6 @@
 package com.book.manager.service;
 
+import ch.qos.logback.core.pattern.ConverterUtil;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
 import com.book.manager.dao.BookMapper;
@@ -12,6 +13,7 @@ import com.book.manager.repos.BookRepository;
 import com.book.manager.repos.BorrowRepository;
 import com.book.manager.repos.UsersRepository;
 import com.book.manager.util.consts.Constants;
+import com.book.manager.util.consts.ConvertUtil;
 import com.book.manager.util.ro.PageIn;
 import com.book.manager.util.vo.BookOut;
 import com.book.manager.util.vo.BorrowOut;
@@ -24,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -65,10 +68,10 @@ public class BorrowService {
         Users users = userService.findUserById(borrow.getUserId());
 
         // 查询是否已经借阅过该图书
-        Borrow bor = findBorrowByUserIdAndBookId(users.getId(),book.getId());
-        if (bor!=null) {
+        Borrow bor = findBorrowByUserIdAndBookId(users.getId(), book.getId());
+        if (bor != null) {
             Integer ret = bor.getRet();
-            if (ret!=null) {
+            if (ret != null) {
                 // 已借阅, 未归还 不可再借
                 if (ret == Constants.NO) {
                     return Constants.BOOK_BORROWED;
@@ -78,21 +81,21 @@ public class BorrowService {
 
         // 库存数量减一
         int size = book.getSize();
-        if (size>0) {
+        if (size > 0) {
             size--;
             book.setSize(size);
             bookService.updateBook(book);
-        }else {
+        } else {
             return Constants.BOOK_SIZE_NOT_ENOUGH;
         }
 
         // 用户可借数量减一
         int userSize = users.getSize();
-        if (userSize>0) {
-            userSize --;
+        if (userSize > 0) {
+            userSize--;
             users.setSize(userSize);
             userService.updateUser(users);
-        }else {
+        } else {
             return Constants.USER_SIZE_NOT_ENOUGH;
         }
 
@@ -101,9 +104,10 @@ public class BorrowService {
         borrow.setRet(Constants.NO);
         borrow.setUsername(users.getUsername());
         borrow.setBookname(book.getName());
+        borrow.setIsBorrow(1);
 //        borrow.setUserId(users.getId());
 //        borrow.setBookId(book.getId());
-        borrowRepository.save(borrow);
+        borrowRepository.saveAndFlush(borrow);
 
         // 一切正常
         return Constants.OK;
@@ -120,7 +124,7 @@ public class BorrowService {
      * user id查询所有 已借阅信息
      */
     public List<Borrow> findBorrowsByUserIdAndRet(Integer userId, Integer ret) {
-        return borrowRepository.findBorrowsByUserIdAndRet(userId,ret);
+        return borrowRepository.findBorrowsByUserIdAndRet(userId, ret);
     }
 
 
@@ -139,14 +143,14 @@ public class BorrowService {
      * 编辑
      */
     public boolean updateBorrow(Borrow borrow) {
-        return borrowMapper.updateBorrow(borrow)>0;
+        return borrowMapper.updateBorrow(borrow) > 0;
     }
 
     /**
      * 编辑
      */
     @Transactional(rollbackFor = Exception.class)
-    public boolean updateBorrowInfo(Borrow borrow){
+    public boolean updateBorrowInfo(Borrow borrow) {
         return borrowMapper.updateBor(BeanUtil.beanToMap(borrow)) > 0;
     }
 
@@ -166,29 +170,32 @@ public class BorrowService {
 
     /**
      * 查询用户某一条借阅信息
+     *
      * @param userId 用户id
      * @param bookId 图书id
      */
-    public Borrow findBorrowByUserIdAndBookId(int userId,int bookId) {
-        return borrowMapper.findBorrowByUserIdAndBookId(userId,bookId);
+    public Borrow findBorrowByUserIdAndBookId(int userId, int bookId) {
+        return borrowMapper.findBorrowByUserIdAndBookId(userId, bookId);
     }
 
     /**
      * 编辑用户
+     *
      * @param book 图书对象
      * @return true or false
      */
     public boolean updateBook(Book book) {
-        return borrowMapper.updateBor(BeanUtil.beanToMap(book))>0;
+        return borrowMapper.updateBor(BeanUtil.beanToMap(book)) > 0;
     }
 
     /**
      * 归还书籍, 使用事务保证 ACID
+     *
      * @param userId 用户Id
      * @param bookId 书籍id
      */
     @Transactional(rollbackFor = Exception.class)
-    public void retBook(int userId,int bookId) {
+    public void retBook(int userId, int bookId) {
         // 用户可借数量加1
         Users user = userService.findUserById(userId);
         Integer size = user.getSize();
@@ -211,19 +218,45 @@ public class BorrowService {
 //        this.deleteBorrow(borrow.getId());
     }
 
+    /**
+     * 续借
+     */
+
+    @Transactional(rollbackFor = Exception.class)
+    public void renewBook(int userId, int bookId) throws ParseException {
+
+        int num = 30;
+
+        Borrow borrow = borrowMapper.findBorrowData(userId, bookId);
+
+        Users users = userService.findUserById(userId);
+
+        if (users.getIdentity() == 1){
+            num = 60;
+        }
+
+        int day = ConvertUtil.getDistanceDays(DateUtil.format(borrow.getCreateTime(), Constants.DATE_FORMAT), DateUtil.format(borrow.getEndTime(), Constants.DATE_FORMAT));  // 返回相差的天数
+
+        String endTime = ConvertUtil.plusDay(day + num, DateUtil.format(borrow.getEndTime(), Constants.DATE_FORMAT));
+
+        borrow.setIsBorrow(0);
+        borrow.setEndTime(ConvertUtil.StrToDate(endTime));
+
+        this.updateBorrowInfo(borrow);
+
+    }
+
 
     /**
      * 操作日志记录
+     *
      * @param pageIn
      * @return
      */
 
     public PageOut getLogList(PageIn pageIn) {
 
-        PageHelper.startPage(pageIn.getCurrPage(),pageIn.getPageSize());
-
-//        System.out.println("********************************");
-//        System.out.println(pageIn.getKeyword());
+        PageHelper.startPage(pageIn.getCurrPage(), pageIn.getPageSize());
 
         List<Borrow> list = borrowMapper.findLogList(pageIn.getKeyword());
 
@@ -232,7 +265,7 @@ public class BorrowService {
         List<BorrowOut> borrowOuts = new ArrayList<>();
         for (Borrow borrow : pageInfo.getList()) {
             BorrowOut out = new BorrowOut();
-            BeanUtil.copyProperties(borrow,out);
+            BeanUtil.copyProperties(borrow, out);
             if (out.getUsername() == null) {
                 out.setUsername(usersRepository.findUsersById(out.getUserId()).getUsername());
             }
@@ -240,7 +273,7 @@ public class BorrowService {
                 out.setBookname(bookRepository.findBookById(out.getBookId()).getName());
             }
             out.setEndTime(DateUtil.format(borrow.getEndTime(), "yyyy-MM-dd"));
-            out.setCreateTime(DateUtil.format(borrow.getCreateTime(),"yyyy-MM-dd"));
+            out.setCreateTime(DateUtil.format(borrow.getCreateTime(), "yyyy-MM-dd"));
             out.setUpdateTime(DateUtil.format(borrow.getUpdateTime(), "yyyy-MM-dd"));
             borrowOuts.add(out);
         }
@@ -248,7 +281,7 @@ public class BorrowService {
         // 自定义分页返回对象
         PageOut pageOut = new PageOut();
         pageOut.setList(borrowOuts);
-        pageOut.setTotal((int)pageInfo.getTotal());
+        pageOut.setTotal((int) pageInfo.getTotal());
         pageOut.setCurrPage(pageInfo.getPageNum());
         pageOut.setPageSize(pageInfo.getPageSize());
         return pageOut;

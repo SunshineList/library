@@ -139,6 +139,11 @@
 								<a id="ques" href="javascript:page('question/index');">调查问卷</i></a>
 							</li>
 
+							<li class="menu-item" id="person">
+								<a href="javascript:page('borrow/back');">个人中心</i></a>
+							</li>
+
+
 						</ul>
 					</div>
 				</div>
@@ -226,6 +231,7 @@
 					$("#purchase").hide()
 					$("#question").hide()
 					$("#question-statistics").hide()
+					$("#person").hide()
 				}
 
                 if (auth === 4){  // 采购员
@@ -238,10 +244,12 @@
 					$("#journal_borrow").hide();
 					$("#question").hide()
 					$("#statistics").hide()
+					$("#person").hide()
 				}
 
                 if (auth === 3){
                 	$("#question").hide()
+					$("#person").hide()
 				}
 			}
 

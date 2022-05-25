@@ -35,4 +35,7 @@ public class BorrowOut {
     @ApiModelProperty("图书名称")
     private String bookname;
 
+    @ApiModelProperty("是否续借")
+    private Integer isBorrow;
+
 }

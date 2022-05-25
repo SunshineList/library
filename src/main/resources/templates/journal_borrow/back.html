@@ -101,6 +101,10 @@
 </div>
 
 <script>
+
+    var isLate = 0
+    var isBorrow = 1
+
     $(document).ready(function () {
         // 1. 先查询用户信息
         $.get("/user/currUser", function (data) {
@@ -117,13 +121,26 @@
                 var backArray = result.data;
                 // 渲染用户数据
                 $.each(backArray, function (index, value) {
-                    console.log(value);
                     var num = index + 1;
-                    text += "<tr align='center'><td>" + num + "</td><td>" + value.name + "</td><td>" + value.author + "</td><td>" + value.issn + "</td>" +
-                        "<td>" + value.pages + "</td><td>" + value.price + "</td><td>" + value.publish + "</td><td>" +
-                    value.borrowTime + "</td><td>" + value.endTime + "</td><td>" + value.late + "</td><td>" +
-                    "<button class='button blue empty' onclick='retBook(" + user.id + "," + value.id + ")'>归还图书</td></tr>";
+                    if (value.late === "否") {
+                        text += "<tr align='center'><td>" + num + "</td><td>" + value.name + "</td><td>" + value.author + "</td><td>" + value.issn + "</td>" +
+                            "<td>" + value.pages + "</td><td>" + value.price + "</td><td>" + value.publish + "</td><td>" +
+                            value.borrowTime + "</td><td>" + value.endTime + "</td><td>" + value.late + "</td><td>" +
+                            "<button class='button blue empty' onclick='retBook(" + user.id + "," + value.id + ")'>归还期刊</button> &nbsp;" +
+                            "<button class='button green empty' onclick='renewJournal(" + user.id + "," + value.id + ")'>续借</td></tr>";
+                        if (value.isBorrow == 1 || value.isBorrow == "") {
+                            isBorrow = 1
+                        } else {
+                            isBorrow = 0
+                        }
+                    } else {
+                        text += "<tr align='center'><td>" + num + "</td><td>" + value.name + "</td><td>" + value.author + "</td><td>" + value.issn + "</td>" +
+                            "<td>" + value.pages + "</td><td>" + value.price + "</td><td>" + value.publish + "</td><td>" +
+                            value.borrowTime + "</td><td>" + value.endTime + "</td><td>" + value.late + "</td><td>" +
+                            "<button class='button blue empty' onclick='retBook(" + user.id + "," + value.id + ")'>归还期刊</td></tr>";
+                    }
                 });
+
 
                 $("#tbody").html(text);
             });
@@ -133,17 +150,39 @@
 
     // 3. 归还操作
     function retBook(userId, journalId) {
-        // 关闭异步, 此处关闭异步的原因是修改和提示异步的话, 提示会直接不可用!
-        $.ajaxSettings.async = false;
-        $.post("/journal_borrow/ret", {"userId": userId, "journalId": journalId}, function (result) {
-            var code = result.code;
-            if (code === 200) {
-                alert("归还成功!");
-            }
-        }, "json");
+        if (isLate == 1) {
+            alert("您已逾期，请缴费后再归还!")
+        } else {
+            // 关闭异步, 此处关闭异步的原因是修改和提示异步的话, 提示会直接不可用!
+            $.ajaxSettings.async = false;
+            $.post("/journal_borrow/ret", {"userId": userId, "journalId": journalId}, function (result) {
+                var code = result.code;
+                if (code === 200) {
+                    alert("归还成功!");
+                }
+            }, "json");
 
-        // 恢复异步
-        $.ajaxSettings.async = true;
+            // 恢复异步
+            $.ajaxSettings.async = true;
+        }
+    }
+
+    var renewJournal = (userId, journalId) => {
+        if (isBorrow == 0) {
+            alert("您已经续借过一次了 无法继续续借")
+        } else {
+            // 关闭异步, 此处关闭异步的原因是修改和提示异步的话, 提示会直接不可用!
+            $.ajaxSettings.async = false;
+            $.post("/journal_borrow/renew", {"userId": userId, "journalId": journalId}, function (result) {
+                var code = result.code;
+                if (code === 200) {
+                    alert("续借成功!");
+                }
+            }, "json");
+
+            // 恢复异步
+            $.ajaxSettings.async = true;
+        }
     }
 
 </script>

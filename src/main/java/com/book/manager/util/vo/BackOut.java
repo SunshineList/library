@@ -20,4 +20,7 @@ public class BackOut extends BookOut{
     @ApiModelProperty("是否逾期")
     private String late;
 
+    @ApiModelProperty("是否已续借")
+    private String isBorrow;
+
 }

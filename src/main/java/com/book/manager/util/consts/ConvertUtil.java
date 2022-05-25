@@ -1,5 +1,11 @@
 package com.book.manager.util.consts;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * @Description 数字类型 和 中文名称互转
  * @Date 2020/7/28 13:48
@@ -72,4 +78,67 @@ public class ConvertUtil {
         }
         return result;
     }
+
+
+    public static int getDistanceDays(String str1, String str2){
+        DateFormat df = new SimpleDateFormat(Constants.DATE_FORMAT);
+        Date one;
+        Date two;
+        int days=0;
+        try {
+            one = df.parse(str1);
+            two = df.parse(str2);
+            long time1 = one.getTime();
+            long time2 = two.getTime();
+            long diff ;
+            if(time1<time2) {
+                diff = time2 - time1;
+            } else {
+                diff = time1 - time2;
+            }
+            days = (int) (diff / (1000 * 60 * 60 * 24));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return days;
+    }
+
+
+    /**
+     * 指定日期加上天数后的日期
+     * @param num 为增加的天数
+     * @param newDate 创建时间
+     * @return
+     * @throws ParseException
+     */
+    public static String plusDay(int num,String newDate) throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date  currdate = format.parse(newDate);
+        System.out.println("现在的日期是：" + currdate);
+        Calendar ca = Calendar.getInstance();
+        ca.add(Calendar.DATE, num);// num为增加的天数，可以改变的
+        currdate = ca.getTime();
+        String enddate = format.format(currdate);
+        System.out.println("增加天数以后的日期：" + enddate);
+        return enddate;
+    }
+
+
+    /**
+     * 字符串转换成日期
+     * @param str
+     * @return date
+     */
+    public static Date StrToDate(String str) {
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        try {
+            date = format.parse(str);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
 }

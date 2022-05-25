@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -109,11 +110,14 @@ public class BorrowController {
                 // 判断是否逾期
                 String toDay = DateUtil.format(new Date(), Constants.DATE_FORMAT);
                 int i = toDay.compareTo(endTimeStr);
-                if (i>0) {
+                if (i > 0) {
                     backOut.setLate(Constants.YES_STR);
                 }else {
                     backOut.setLate(Constants.NO_STR);
                 }
+
+                // 判断是否续借了
+                backOut.setIsBorrow(borrow.getIsBorrow() + "");
 
                 outs.add(backOut);
             }
@@ -127,6 +131,16 @@ public class BorrowController {
     public R retBook(Integer userId, Integer bookId) {
         // 归还图书
         borrowService.retBook(userId,bookId);
+        return R.success(CodeEnum.SUCCESS);
+    }
+
+    @ApiOperation("续借")
+    @PostMapping("/renew")
+    public R renewBook(Integer userId, Integer bookId) throws ParseException {
+
+        // 续借图书
+        borrowService.renewBook(userId, bookId);
+
         return R.success(CodeEnum.SUCCESS);
     }
 

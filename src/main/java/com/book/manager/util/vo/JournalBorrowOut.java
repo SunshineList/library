@@ -31,4 +31,7 @@ public class JournalBorrowOut {
 
     @ApiModelProperty("期刊名称")
     private String journalname;
+
+    @ApiModelProperty("是否发生了续借 0 发生了 1未发生")
+    private Integer isBorrow;
 }

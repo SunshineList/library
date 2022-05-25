@@ -26,4 +26,6 @@ public interface JournalBorrowMapper {
     int updateBor(Map<String,Object> map);
 
     List<JournalBorrow> findLogList(String keyword);
+
+    JournalBorrow findJournalBorrowData(int userId, int journalId);
 }

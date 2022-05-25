@@ -105,6 +105,9 @@
 </div>
 
 <script>
+	var isLate = 0
+	var isBorrow = 1
+
     $(document).ready(function(){
         // 1. 先查询用户信息
         $.get("/user/currUser", function(data){
@@ -123,10 +126,25 @@
                 $.each(backArray,function(index,value){
                     console.log(value);
                     var num = index+1;
-                    text+= "<tr align='center'><td>"+num+"</td><td>"+value.name+"</td><td>"+value.author+"</td><td>"+value.isbn+"</td>" +
-                        "<td>"+value.pages+"</td><td>"+value.price+"</td><td>"+value.publish+"</td><td>"+value.type+"</td>" +
-                        "<td>"+value.borrowTime+"</td><td>"+value.endTime+"</td><td>"+value.late+"</td><td>"+
-                        "<button class='button blue empty' onclick='retBook("+user.id+","+value.id+")'>归还图书</td></tr>";
+                    if (value.late === "否") {
+						text += "<tr align='center'><td>" + num + "</td><td>" + value.name + "</td><td>" + value.author + "</td><td>" + value.isbn + "</td>" +
+								"<td>" + value.pages + "</td><td>" + value.price + "</td><td>" + value.publish + "</td><td>" + value.type + "</td>" +
+								"<td>" + value.borrowTime + "</td><td>" + value.endTime + "</td><td>" + value.late + "</td><td>" +
+								"<button class='button blue empty' onclick='retBook(" + user.id + "," + value.id + ")'>归还图书</button> &nbsp;" +
+								"<button class='button green empty' onclick='renewBook(" + user.id + "," + value.id + ")'>续借</td></tr>";
+						console.log(value.isBorrow)
+						if (value.isBorrow == 1 || value.isBorrow == ""){
+							isBorrow = 1
+						}else {
+							isBorrow = 0
+						}
+					}else {
+						text+= "<tr align='center'><td>"+num+"</td><td>"+value.name+"</td><td>"+value.author+"</td><td>"+value.isbn+"</td>" +
+								"<td>"+value.pages+"</td><td>"+value.price+"</td><td>"+value.publish+"</td><td>"+value.type+"</td>" +
+								"<td>"+value.borrowTime+"</td><td>"+value.endTime+"</td><td>"+value.late+"</td><td>"+
+								"<button class='button blue empty' onclick='retBook("+user.id+","+value.id+")'>归还图书</td></tr>";
+						isLate = 1
+					}
                 });
 
                 $("#tbody").html(text);
@@ -137,18 +155,44 @@
 
 	// 3. 归还操作
 	function retBook(userId,bookId) {
-	    // 关闭异步, 此处关闭异步的原因是修改和提示异步的话, 提示会直接不可用!
-        $.ajaxSettings.async = false;
-        $.post("/borrow/ret",{"userId":userId,"bookId":bookId},function(result) {
-            var code = result.code;
-            if (code == 200) {
-               alert("归还成功!");
-            }
-		},"json");
 
-        // 恢复异步
-        $.ajaxSettings.async = true;
+		// 判断一下 直接在前端限制就好了
+		if (isLate == 1){
+			alert("您已逾期，请缴费后再归还!");
+		}else{
+			// 关闭异步, 此处关闭异步的原因是修改和提示异步的话, 提示会直接不可用!
+			$.ajaxSettings.async = false;
+			$.post("/borrow/ret",{"userId":userId,"bookId":bookId},function(result) {
+				var code = result.code;
+				if (code == 200) {
+					alert("归还成功!");
+				}
+			},"json");
+
+			// 恢复异步
+			$.ajaxSettings.async = true;
+		}
     }
+
+    // 续借
+	var renewBook = (userId, bookId)=>{
+
+		if (isBorrow == 0){
+			alert("您已经续借过一次了 无法继续续借")
+		} else {
+			// 关闭异步, 此处关闭异步的原因是修改和提示异步的话, 提示会直接不可用!
+			$.ajaxSettings.async = false;
+			$.post("/borrow/renew",{"userId":userId,"bookId":bookId},function(result) {
+				var code = result.code;
+				if (code == 200) {
+					alert("续借成功!");
+				}
+			},"json");
+
+			// 恢复异步
+			$.ajaxSettings.async = true;
+		}
+	}
 
 </script>
 </body>

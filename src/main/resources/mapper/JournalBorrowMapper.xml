@@ -9,6 +9,7 @@
         <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
         <result column="ret" property="ret" jdbcType="INTEGER" />
+        <result column="is_borrow" property="isBorrow" jdbcType="INTEGER" />
     </resultMap>
 
     <update id="updateBor" parameterType="map">
@@ -32,6 +33,9 @@
             <if test="ret != null">
                 ret = #{ret},
             </if>
+            <if test="isBorrow != null">
+                is_borrow = #{isBorrow},
+            </if>
         </set>
         where id = #{id}
     </update>
@@ -44,6 +48,10 @@
             </if>
         </where>
         order by create_time desc, ret desc
+    </select>
+
+    <select id="findJournalBorrowData" resultMap="BaseResultMap">
+        select * from journal_borrow where user_id=#{userId} and journal_id=#{journalId} and ret = 1
     </select>
 
 </mapper>

@@ -52,5 +52,8 @@ public class Borrow {
 
     @ApiModelProperty("图书名称")
     private String bookname;
+
+    @ApiModelProperty("是否发生了续借 0 发生了 1未发生")
+    private Integer isBorrow;
     // json: {"userId":userId,"bookId":bookId,"createTime":createTime,"endTime":endTime,"updateTime":updateTime}
 }

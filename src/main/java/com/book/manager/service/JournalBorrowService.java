@@ -7,6 +7,7 @@ import com.book.manager.dao.JournalBorrowMapper;
 import com.book.manager.entity.*;
 import com.book.manager.repos.*;
 import com.book.manager.util.consts.Constants;
+import com.book.manager.util.consts.ConvertUtil;
 import com.book.manager.util.ro.PageIn;
 import com.book.manager.util.vo.BorrowOut;
 import com.book.manager.util.vo.JournalBorrowOut;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -104,6 +106,7 @@ public class JournalBorrowService {
         journalBorrow.setRet(Constants.NO);
         journalBorrow.setUsername(users.getUsername());
         journalBorrow.setJournalname(journal.getName());
+        journalBorrow.setIsBorrow(1);
         journalBorrowRepository.save(journalBorrow);
 
         // 一切正常
@@ -216,6 +219,35 @@ public class JournalBorrowService {
         journalBorrow.setRet(Constants.YES);
         journalBorrow.setUpdateTime(new Date());
         this.updateBorrowInfo(journalBorrow);
+    }
+
+
+    /**
+     * 续借
+     */
+
+    @Transactional(rollbackFor = Exception.class)
+    public void renewJournal(int userId, int journalId) throws ParseException {
+
+        int num = 30;
+
+        JournalBorrow journalBorrow = journalBorrowMapper.findJournalBorrowData(userId, journalId);
+
+        Users users = userService.findUserById(userId);
+
+        if (users.getIdentity() == 1){
+            num = 60;
+        }
+
+        int day = ConvertUtil.getDistanceDays(DateUtil.format(journalBorrow.getCreateTime(), Constants.DATE_FORMAT), DateUtil.format(journalBorrow.getEndTime(), Constants.DATE_FORMAT));  // 返回相差的天数
+
+        String endTime = ConvertUtil.plusDay(day + num, DateUtil.format(journalBorrow.getEndTime(), Constants.DATE_FORMAT));
+
+        journalBorrow.setIsBorrow(0);
+        journalBorrow.setEndTime(ConvertUtil.StrToDate(endTime));
+
+        this.updateBorrowInfo(journalBorrow);
+
     }
 
 

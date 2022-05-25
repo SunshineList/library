@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -118,6 +119,8 @@ public class JournalBorrowController {
                     backOut.setLate(Constants.NO_STR);
                 }
 
+                backOut.setIsBorrow(journalBorrow.getIsBorrow() + "");
+
                 outs.add(backOut);
             }
         }
@@ -130,6 +133,16 @@ public class JournalBorrowController {
     public R retBook(Integer userId, Integer journalId) {
         // 归还图书
         journalBorrowService.retBook(userId,journalId);
+        return R.success(CodeEnum.SUCCESS);
+    }
+
+    @ApiOperation("续借")
+    @PostMapping("/renew")
+    public R renewBook(Integer userId, Integer journalId) throws ParseException {
+
+        // 续借图书
+        journalBorrowService.renewJournal(userId, journalId);
+
         return R.success(CodeEnum.SUCCESS);
     }
 
