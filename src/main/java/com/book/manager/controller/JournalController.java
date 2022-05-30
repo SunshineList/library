@@ -39,6 +39,15 @@ public class JournalController {
         return R.success(CodeEnum.SUCCESS,journalService.getJournalList(pageIn));
     }
 
+    @ApiOperation("过期期刊列表")
+    @PostMapping("/expired_list")
+    public R getExpiredList(@RequestBody PageIn pageIn){
+        if (pageIn == null){
+            return R.fail(CodeEnum.PARAM_ERROR);
+        }
+        return R.success(CodeEnum.SUCCESS, journalService.getExpiredJournalList(pageIn));
+    }
+
     @ApiOperation("添加期刊")
     @PostMapping("/add")
     public R addJournal(@RequestBody Journal journal) {
@@ -68,6 +77,13 @@ public class JournalController {
     @GetMapping("/delete")
     public R delJournal(Integer id) {
         journalService.deleteJournal(id);
+        return R.success(CodeEnum.SUCCESS);
+    }
+
+    @ApiOperation("批量删除过期期刊")
+    @PostMapping("/all_delete")
+    public R allDeLeteJournal(){
+        journalService.deleteExpiredJournal();
         return R.success(CodeEnum.SUCCESS);
     }
 

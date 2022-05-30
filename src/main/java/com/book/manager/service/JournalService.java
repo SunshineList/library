@@ -97,6 +97,14 @@ public class JournalService {
         JournalRepository.deleteById(id);
     }
 
+    /**
+     * 批量删除过期期刊
+     */
+
+    public void deleteExpiredJournal(){
+        JournalMapper.deleteExpiredJournal();
+    }
+
 
     /**
      * 图书搜索查询(mybatis 分页)
@@ -107,6 +115,34 @@ public class JournalService {
 
         PageHelper.startPage(pageIn.getCurrPage(),pageIn.getPageSize());
         List<Journal> list = JournalMapper.findJournalListByLike(pageIn.getKeyword());
+        PageInfo<Journal> pageInfo = new PageInfo<>(list);
+
+        List<JournalOut> JournalOuts = new ArrayList<>();
+        for (Journal Journal : pageInfo.getList()) {
+            JournalOut out = new JournalOut();
+            BeanUtil.copyProperties(Journal,out);
+            out.setPublishTime(DateUtil.format(Journal.getPublishTime(),"yyyy-MM-dd"));
+            JournalOuts.add(out);
+        }
+
+        // 自定义分页返回对象
+        PageOut pageOut = new PageOut();
+        pageOut.setList(JournalOuts);
+        pageOut.setTotal((int)pageInfo.getTotal());
+        pageOut.setCurrPage(pageInfo.getPageNum());
+        pageOut.setPageSize(pageInfo.getPageSize());
+        return pageOut;
+    }
+
+    /**
+     * 过期期刊搜索查询(mybatis 分页)
+     * @param pageIn
+     * @return
+     */
+    public PageOut getExpiredJournalList(PageIn pageIn) {
+
+        PageHelper.startPage(pageIn.getCurrPage(),pageIn.getPageSize());
+        List<Journal> list = JournalMapper.findExpiredJournalList(pageIn.getKeyword());
         PageInfo<Journal> pageInfo = new PageInfo<>(list);
 
         List<JournalOut> JournalOuts = new ArrayList<>();

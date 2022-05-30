@@ -23,6 +23,11 @@ public interface JournalMapper {
     List<Journal> findJournalListByLike(String keyword);
 
     /**
+     * 查询过期期刊列表
+     */
+
+    List<Journal> findExpiredJournalList(String keyword);
+    /**
      * 编辑用户
      * @param map
      * @return
@@ -34,4 +39,14 @@ public interface JournalMapper {
      */
 
     int JournalTypeTj(String type);
+
+    /**
+     *
+     * 批量删除过期期刊
+     *
+     */
+
+    int deleteExpiredJournal();
+
 }
+

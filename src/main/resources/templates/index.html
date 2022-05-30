@@ -71,6 +71,7 @@
 								<ul>
 									<li><a id="journal-list" href="javascript:page('journal/journal-list');">期刊列表</a></li>
 									<li><a id="add-journal" href="javascript:page('journal/journal-add');">期刊上架</a></li>
+									<li><a id="delete-journal" href="javascript:page('journal/journal-delete');">过期期刊删除</a></li>
 <!--									<li><a id="journal-statistics" href="javascript:page('statistics/journal');">期刊统计</a></li>-->
 								</ul>
 							</li>
@@ -205,6 +206,7 @@
 				if (auth === 0){ // 普通读者
 					$("#add-book").hide()
 					$("#add-journal").hide()
+					$("#delete-journal").hide()
 					$("#reader").hide()
 					$("#log_m").hide()
 					$("#user").hide()
@@ -215,6 +217,7 @@
             	if (auth === 1){ // vip读者
 					$("#add-book").hide()
 					$("#add-journal").hide()
+					$("#delete-journal").hide()
 					$("#reader").hide()
 					$("#log_m").hide()
 					$("#user").hide()
@@ -237,6 +240,7 @@
                 if (auth === 4){  // 采购员
 					$("#add-book").hide()
 					$("#add-journal").hide()
+					$("#delete-journal").hide()
 					$("#reader").hide();
 					$("#user").hide();
 					$("#borrow").hide();

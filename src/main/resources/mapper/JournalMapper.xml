@@ -25,6 +25,13 @@
     </select>
 
 
+    <!-- 模糊查询 倒序 -->
+    <select id="findExpiredJournalList" resultMap="BaseResultMap" >
+        select * from journal where now() > ADDDATE(publish_time, INTERVAL 1 year ) order by id desc
+    </select>
+
+
+
     <update id="updateJournal" parameterType="map">
         update journal
         <set>
@@ -56,5 +63,9 @@
     <select id="JournalTypeTj" resultType="Integer">
         select COUNT(*) from journal where type = #{_parameter}
     </select>
+
+    <delete id="deleteExpiredJournal">
+        delete from journal where now() > ADDDATE(publish_time, INTERVAL 1 year )
+    </delete>
 
 </mapper>
